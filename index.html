@@ -829,7 +829,7 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 .extremo .km { font-variant-numeric: tabular-nums; color: var(--texto-2); white-space: nowrap; }
 
 /* Camadas */
-.seg { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 4px; border: 1px solid var(--borda); border-radius: 9px; background: var(--superficie); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border: 1px solid var(--borda); border-radius: 9px; background: var(--superficie); }
 .seg button { min-height: 36px; border: 0; border-radius: 6px; background: transparent; color: var(--texto-2); cursor: pointer; font-weight: 600; }
 .seg button[aria-checked="true"] { background: var(--caqui); color: var(--preto); }
 .chave { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; }
@@ -938,6 +938,33 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 .leaflet-container .leaflet-control-attribution { background: rgba(255, 255, 255, .82); color: #3a362c; font-family: var(--fonte-texto); font-size: 11px; }
 .leaflet-container .leaflet-control-attribution a { color: #1f4f8a; }
 
+/* seletor de mapa no canto superior direito, com miniaturas */
+.mapa .leaflet-top.leaflet-right { transition: right .22s ease; }
+.seletor-mapa.leaflet-control { position: relative; margin: 12px 12px 0 0; font-family: var(--fonte-texto); color: var(--texto); }
+.seletor-botao { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 5px 12px 5px 5px; border: 1px solid var(--borda); border-radius: 10px;
+  background: var(--painel-solido); box-shadow: var(--sombra); cursor: pointer; color: var(--texto); }
+.seletor-botao:hover, .seletor-botao[aria-expanded="true"] { border-color: var(--caqui); }
+.seletor-mini { width: 38px; height: 38px; border-radius: 7px; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .18); background: var(--superficie); }
+.seletor-texto { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+.seletor-texto small { font-family: var(--fonte-titulo); font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--caqui); }
+.seletor-texto b { font-size: 14px; font-weight: 600; white-space: nowrap; }
+.seletor-botao svg { color: var(--texto-2); }
+.seletor-menu { position: absolute; right: 0; top: calc(100% + 8px); width: 318px; padding: 12px; border: 1px solid var(--borda); border-radius: 10px;
+  background: var(--painel-solido); box-shadow: var(--sombra); }
+.seletor-titulo { margin-bottom: 10px; font-family: var(--fonte-titulo); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--texto-2); }
+.seletor-opcoes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.seletor-opcao { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 0; border: 0; background: none; cursor: pointer; color: var(--texto-2); font-size: 12px; font-weight: 600; }
+.seletor-opcao img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; border: 2px solid transparent; box-shadow: 0 0 0 1px var(--borda); background: var(--superficie); }
+.seletor-opcao:hover img { box-shadow: 0 0 0 1px var(--caqui-escuro); }
+.seletor-opcao[aria-pressed="true"] { color: var(--caqui-forte); }
+.seletor-opcao[aria-pressed="true"] img { border-color: var(--caqui); }
+.seletor-chave { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--borda); font-size: 13px; cursor: pointer; }
+.seletor-chave input { width: 16px; height: 16px; accent-color: var(--caqui); flex: none; }
+@media (min-width: 761px) {
+  /* com o cartão de detalhe aberto à direita, o seletor anda para o lado e continua visível */
+  .app.com-cartao .mapa .leaflet-top.leaflet-right { right: 362px; }
+}
+
 /* aviso quando o mapa de fundo não carrega */
 .aviso-mapa { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; max-width: min(560px, calc(100% - 100px));
   padding: 8px 8px 8px 14px; border-radius: 8px; background: var(--painel-solido); border: 1px solid var(--alerta); color: var(--texto); font-size: 13px; box-shadow: var(--sombra); z-index: 35; }
@@ -954,11 +981,17 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
   .app.barra-aberta .mapa { left: var(--barra-w); }
   .painel, .app.barra-aberta .painel { left: 0; right: 0; top: auto; bottom: 0; width: auto; height: 60%; border-radius: 14px 14px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); z-index: 28; }
   .cartao { left: calc(var(--barra-w) + 8px); right: 8px; top: auto; bottom: 8px; width: auto; max-height: 55%; z-index: 26; }
+  .seletor-mapa.leaflet-control { margin: 10px 10px 0 0; }
+  .seletor-botao { min-height: 46px; padding-right: 8px; gap: 6px; }
+  .seletor-texto { display: none; }
+  .seletor-menu { width: 238px; }
+  .seletor-opcoes { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1800px) {
   :root { --painel-w: 400px; }
   body { font-size: 15px; }
   .cartao { width: 390px; }
+  .app.com-cartao .mapa .leaflet-top.leaflet-right { right: 402px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .topo *, .barra, .barra *, .painel, .painel *, .cartao, .mapa, .leaflet-contorno-pane, .leaflet-rotas-pane { transition: none !important; }
@@ -1058,7 +1091,7 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
       <div id="bloco-mapa-base">
         <h3 class="sub">Mapa base</h3>
         <div class="seg" id="seg-mapa-base" role="radiogroup" aria-label="Mapa base"></div>
-        <label class="chave"><input type="checkbox" id="chk-relevo"><span>Relevo sombreado</span></label>
+        <label class="chave"><input type="checkbox" id="chk-relevo"><span>Sombreado do relevo (sobre qualquer mapa)</span></label>
       </div>
       <p class="painel-nota aviso" id="aviso-sem-base" hidden>Esta prévia não carrega o mapa de fundo. Abra o arquivo do mapa no navegador para ver ruas, satélite e relevo.</p>
       <h3 class="sub">Camadas</h3>
@@ -1148,7 +1181,8 @@ window.CONFIG = {
   /* Mapas base (camadas de imagens, como no Leaflet do PPAG). "ruas" é o padrão.
      Com o arquivo aberto direto da pasta (duplo clique) não existe site de origem, e alguns servidores recusam:
      o OpenStreetMap mostra "Access blocked" e a CARTO mostra "API KEY REQUIRED". Por isso "semServidor"
-     define o mapa usado nesse caso (Esri, que não exige site de origem). Publicado num site, vale "camadas". */
+     define o mapa usado nesse caso (Esri, que não exige site de origem). Publicado num site, vale "camadas".
+     "reserva" entra sozinha se o servidor principal não responder. A ordem aqui é a ordem do seletor no mapa. */
   mapaBase: {
     padrao: "ruas",
     opcoes: {
@@ -1164,6 +1198,11 @@ window.CONFIG = {
           { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", maxZoom: 19, opacidade: 0.75 },
           { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", maxZoom: 19 }
         ] },
+      relevo: { rotulo: "Relevo", escuro: false,
+        camadas: [{ url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", maxZoom: 17, sub: "abc",
+          atribuicao: 'Mapa &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA), dados &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM' }],
+        reserva: [{ url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", maxZoom: 19,
+          atribuicao: "Mapa &copy; Esri, HERE, Garmin, USGS, OpenStreetMap" }] },
       claro: { rotulo: "Claro", escuro: false,
         camadas: [
           { url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}", maxZoom: 16,
@@ -1178,8 +1217,8 @@ window.CONFIG = {
         ] }
     }
   },
-  /* Relevo sombreado por cima do mapa base (opcional, desligado ao abrir) */
-  relevo: {
+  /* Sombreado do relevo por cima de qualquer mapa base (opcional, desligado ao abrir) */
+  sombreado: {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}",
     maxZoom: 16, opacidade: 0.45, atribuicao: "Relevo &copy; Esri"
   },
@@ -1245,7 +1284,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     cenario: C.cenarios[0].id,
     modo: "geral", cidades: new Set(), unidades: new Set(),
     rotaSel: null, destinoSel: null, painel: null,
-    base: C.mapaBase.padrao, relevo: false,
+    base: C.mapaBase.padrao, sombreado: false,
     fluxo: !!C.animacaoFluxo,
     camadas: { rotas: true, destinos: true, origens: true },
     busca: ""
@@ -1255,7 +1294,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   let visRotas = [], visDestinos = [];
   // camadas do Leaflet
   const linhas = {}, circulos = {}, marcadoresOrigem = {};
-  let rend = {}, camadaBase = null, camadaRelevo = null, grupoSel = null, grupoParadas = null, grupoDestSel = null;
+  let rend = {}, camadaBase = null, camadaSombreado = null, grupoSel = null, grupoParadas = null, grupoDestSel = null, seletor = null;
 
   /* ---------- carga de dados ---------- */
   async function carregarJSON(url) {
@@ -1381,16 +1420,74 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     grupoSel = L.layerGroup().addTo(mapa);
     grupoParadas = L.layerGroup().addTo(mapa);
     grupoDestSel = L.layerGroup().addTo(mapa);
-    mapa.on("click", fecharCartao);
+    mapa.on("click", () => { fecharSeletor(); fecharCartao(); });
     el.classList.toggle("sem-fluxo", !estado.fluxo);
+    if (C.mapaBaseDisponivel) criarSeletorMapa();
+  }
+
+  /* ---------- seletor de mapa no canto (como no PPAG e no Google) ---------- */
+  // miniatura de cada mapa: a imagem de Ouro Preto no zoom 12
+  function listaCamadas(op, reserva) {
+    if (reserva && op.reserva) return op.reserva;
+    return semServidor && op.semServidor ? op.semServidor : op.camadas;
+  }
+  function miniatura(k) {
+    const t = listaCamadas(C.mapaBase.opcoes[k])[0];
+    return t.url.replace("{s}", (t.sub || "abc")[0]).replace("{z}", "12").replace("{x}", "1553").replace("{y}", "2284").replace("{r}", "");
+  }
+  function criarSeletorMapa() {
+    const Seletor = L.Control.extend({
+      options: { position: "topright" },
+      onAdd() {
+        const div = L.DomUtil.create("div", "seletor-mapa");
+        const opcoes = Object.entries(C.mapaBase.opcoes).map(([k, v]) =>
+          '<button type="button" class="seletor-opcao" data-base="' + k + '" aria-pressed="' + (k === estado.base) + '"><img alt="" src="' + esc(miniatura(k)) + '"><span>' + esc(v.rotulo) + "</span></button>").join("");
+        div.innerHTML = '<button type="button" class="seletor-botao" aria-expanded="false" aria-haspopup="true" title="Trocar o mapa de fundo">' +
+          '<img class="seletor-mini" alt="" src=""><span class="seletor-texto"><small>Mapa</small><b></b></span><svg><use href="#i-camadas"/></svg></button>' +
+          '<div class="seletor-menu" hidden><div class="seletor-titulo">Mapa de fundo</div><div class="seletor-opcoes">' + opcoes + "</div>" +
+          '<label class="seletor-chave"><input type="checkbox" data-sombreado><span>Sombreado do relevo</span></label></div>';
+        L.DomEvent.disableClickPropagation(div);
+        L.DomEvent.disableScrollPropagation(div);
+        div.querySelector(".seletor-botao").addEventListener("click", () => (div.querySelector(".seletor-menu").hidden ? abrirSeletor() : fecharSeletor()));
+        div.querySelectorAll(".seletor-opcao").forEach((b) => b.addEventListener("click", () => trocarBase(b.dataset.base)));
+        div.querySelector("[data-sombreado]").addEventListener("change", (e) => definirSombreado(e.target.checked));
+        return div;
+      }
+    });
+    seletor = new Seletor().addTo(mapa);
+    sincronizarSeletorMapa();
+  }
+  function abrirSeletor() {
+    if (!seletor) return;
+    const c = seletor.getContainer();
+    c.querySelector(".seletor-menu").hidden = false;
+    c.querySelector(".seletor-botao").setAttribute("aria-expanded", "true");
+  }
+  function fecharSeletor() {
+    if (!seletor) return false;
+    const c = seletor.getContainer(), m = c.querySelector(".seletor-menu");
+    if (m.hidden) return false;
+    m.hidden = true;
+    c.querySelector(".seletor-botao").setAttribute("aria-expanded", "false");
+    return true;
+  }
+  function sincronizarSeletorMapa() {
+    $$("#seg-mapa-base button").forEach((b) => b.setAttribute("aria-checked", String(b.dataset.base === estado.base)));
+    $("#chk-relevo").checked = estado.sombreado;
+    if (!seletor) return;
+    const c = seletor.getContainer();
+    c.querySelector(".seletor-mini").src = miniatura(estado.base);
+    c.querySelector(".seletor-texto b").textContent = C.mapaBase.opcoes[estado.base].rotulo;
+    c.querySelectorAll(".seletor-opcao").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.base === estado.base)));
+    c.querySelector("[data-sombreado]").checked = estado.sombreado;
   }
 
   let errosBase = 0, okBase = false, avisoTimer = null;
-  function aplicarBase() {
+  function aplicarBase(usarReserva) {
     if (!C.mapaBaseDisponivel) return;
     if (camadaBase) mapa.removeLayer(camadaBase);
     const op = C.mapaBase.opcoes[estado.base];
-    const lista = semServidor && op.semServidor ? op.semServidor : op.camadas;
+    const lista = listaCamadas(op, usarReserva);
     errosBase = 0; okBase = false;
     camadaBase = L.layerGroup(lista.map((t, i) => {
       const tl = L.tileLayer(t.url, { maxZoom: 19, maxNativeZoom: t.maxZoom || 19, subdomains: t.sub || "abc", attribution: t.atribuicao || "",
@@ -1401,17 +1498,28 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     })).addTo(mapa);
     $("#mapa").classList.toggle("base-escura", !!op.escuro);
     clearTimeout(avisoTimer);
-    avisoTimer = setTimeout(() => { if (!okBase && errosBase > 0) $("#aviso-mapa").hidden = false; }, 7000);
+    const base = estado.base;
+    avisoTimer = setTimeout(() => {
+      if (okBase || errosBase === 0 || base !== estado.base) return;
+      // servidor principal sem resposta: tenta a reserva antes de avisar
+      if (op.reserva && !usarReserva) aplicarBase(true);
+      else $("#aviso-mapa").hidden = false;
+    }, 6000);
   }
 
-  function aplicarRelevo() {
+  function definirSombreado(ligado) {
+    estado.sombreado = ligado;
+    aplicarSombreado();
+    sincronizarSeletorMapa();
+  }
+  function aplicarSombreado() {
     if (!C.mapaBaseDisponivel) return;
-    if (estado.relevo && !camadaRelevo) {
-      camadaRelevo = L.tileLayer(C.relevo.url, { maxZoom: 19, maxNativeZoom: C.relevo.maxZoom, opacity: C.relevo.opacidade, zIndex: 10,
-        className: "camada-relevo", attribution: C.relevo.atribuicao });
+    if (estado.sombreado && !camadaSombreado) {
+      camadaSombreado = L.tileLayer(C.sombreado.url, { maxZoom: 19, maxNativeZoom: C.sombreado.maxZoom, opacity: C.sombreado.opacidade, zIndex: 10,
+        className: "camada-relevo", attribution: C.sombreado.atribuicao });
     }
-    if (estado.relevo) camadaRelevo.addTo(mapa);
-    else if (camadaRelevo) mapa.removeLayer(camadaRelevo);
+    if (estado.sombreado) camadaSombreado.addTo(mapa);
+    else if (camadaSombreado) mapa.removeLayer(camadaSombreado);
   }
 
   function dicaRota(p) {
@@ -1559,8 +1667,8 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   function trocarBase(k) {
     if (k === estado.base) return;
     estado.base = k;
-    $$("#seg-mapa-base button").forEach((b) => b.setAttribute("aria-checked", String(b.dataset.base === k)));
     aplicarBase();
+    sincronizarSeletorMapa();
     recolorir();
     atualizarDestaque();
   }
@@ -1595,6 +1703,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   function abrirCartao(html) {
     $("#cartao-conteudo").innerHTML = html;
     $("#cartao").hidden = false;
+    $("#app").classList.add("com-cartao");
     if (celular()) fecharPainel();
     $$("#cartao-conteudo [data-destino]").forEach((b) => b.addEventListener("click", () => mostrarDestino(b.dataset.destino)));
     $$("#cartao-conteudo [data-rota]").forEach((b) => b.addEventListener("click", () => selecionarRota(b.dataset.rota, true)));
@@ -1602,6 +1711,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   }
   function fecharCartao() {
     $("#cartao").hidden = true;
+    $("#app").classList.remove("com-cartao");
     estado.rotaSel = null; estado.destinoSel = null;
     atualizarDestaque();
   }
@@ -1660,7 +1770,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     $("#painel-titulo").textContent = TITULOS[id];
     $$(".painel-corpo").forEach((s) => s.classList.toggle("ativo", s.dataset.sec === id));
     $$(".barra-item[data-painel]").forEach((b) => b.classList.toggle("ativo", b.dataset.painel === id));
-    if (celular()) $("#cartao").hidden = true;
+    if (celular()) { $("#cartao").hidden = true; $("#app").classList.remove("com-cartao"); }
   }
   function fecharPainel() {
     estado.painel = null;
@@ -1697,7 +1807,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
       if (d.fullscreenElement) d.exitFullscreen().catch(() => {});
       else if (d.documentElement.requestFullscreen) d.documentElement.requestFullscreen().catch(() => {});
     });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!$("#cartao").hidden) fecharCartao(); else fecharPainel(); } });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (fecharSeletor()) return; if (!$("#cartao").hidden) fecharCartao(); else fecharPainel(); } });
     $("#aviso-mapa-fechar").addEventListener("click", () => { $("#aviso-mapa").hidden = true; });
 
     // visão geral: cartões das cidades
@@ -1747,7 +1857,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     if (C.mapaBaseDisponivel) {
       $("#seg-mapa-base").innerHTML = Object.entries(C.mapaBase.opcoes).map(([k, v]) => '<button role="radio" data-base="' + k + '" aria-checked="' + (k === estado.base) + '">' + esc(v.rotulo) + "</button>").join("");
       $$("#seg-mapa-base button").forEach((b) => b.addEventListener("click", () => trocarBase(b.dataset.base)));
-      $("#chk-relevo").addEventListener("change", (e) => { estado.relevo = e.target.checked; aplicarRelevo(); });
+      $("#chk-relevo").addEventListener("change", (e) => definirSombreado(e.target.checked));
     } else {
       $("#bloco-mapa-base").hidden = true;
       $("#aviso-sem-base").hidden = false;
