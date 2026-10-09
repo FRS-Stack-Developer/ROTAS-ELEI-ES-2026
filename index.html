@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Escolta de Urnas 3ª RPM</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preload" href="assets/fontes/rawline-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fontes/rawline-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-geral" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></symbol>
+    <symbol id="i-unidade" viewBox="0 0 24 24"><path d="M12 2.5l7.5 3v5.6c0 4.6-3.1 8.6-7.5 10.4-4.4-1.8-7.5-5.8-7.5-10.4V5.5z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+    <symbol id="i-cidade" viewBox="0 0 24 24"><path d="M12 21.5s-6.5-6-6.5-11a6.5 6.5 0 0113 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10.5" r="2.4"/></symbol>
+    <symbol id="i-lista" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><circle cx="4.5" cy="6.5" r="1.2"/><circle cx="4.5" cy="12" r="1.2"/><circle cx="4.5" cy="17.5" r="1.2"/></symbol>
+    <symbol id="i-indicadores" viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M6.5 17v-5M11 17V7M15.5 17v-8M20 17V4"/></symbol>
+    <symbol id="i-camadas" viewBox="0 0 24 24"><path d="M12 3l9 4.8-9 4.8-9-4.8z"/><path d="M3 12.2l9 4.8 9-4.8"/><path d="M3 16.6l9 4.8 9-4.8"/></symbol>
+    <symbol id="i-legenda" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M7 9h4M7 15h4M14 9h3M14 15h3"/></symbol>
+    <symbol id="i-tela" viewBox="0 0 24 24"><path d="M3.5 9V3.5H9M15 3.5h5.5V9M20.5 15v5.5H15M9 20.5H3.5V15"/></symbol>
+    <symbol id="i-recolher" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6"/></symbol>
+    <symbol id="i-fechar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-busca" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/></symbol>
+  </defs>
+</svg>
+
+<div id="app" class="app">
+  <header class="topo">
+    <img class="topo-escudo" id="topo-escudo" src="assets/escudos/3rpm.webp" alt="Escudo da 3ª RPM" width="40" height="45">
+    <div class="topo-texto">
+      <span class="topo-regiao">PMMG, 3ª RPM</span>
+      <h1 class="topo-titulo"><span id="titulo">Escolta de Urnas</span> <span class="topo-ano" id="subtitulo">Eleições 2026</span></h1>
+    </div>
+    <div class="topo-status">
+      <span class="chip chip-cenario" id="chip-cenario">Cenário atual</span>
+      <span class="topo-filtro" id="topo-filtro">Visão geral 3ª RPM</span>
+    </div>
+  </header>
+
+  <nav class="barra" id="barra" aria-label="Funções do mapa">
+    <button class="barra-item" data-painel="geral" title="Visão geral 3ª RPM"><svg><use href="#i-geral"/></svg><span>Visão geral 3ª RPM</span></button>
+    <button class="barra-item" data-painel="unidade" title="Por unidade"><svg><use href="#i-unidade"/></svg><span>Por unidade</span></button>
+    <button class="barra-item" data-painel="cidade" title="Por cidade"><svg><use href="#i-cidade"/></svg><span>Por cidade</span></button>
+    <button class="barra-item" data-painel="lista" title="Lista de rotas"><svg><use href="#i-lista"/></svg><span>Lista de rotas</span></button>
+    <button class="barra-item" data-painel="indicadores" title="Indicadores"><svg><use href="#i-indicadores"/></svg><span>Indicadores</span></button>
+    <button class="barra-item" data-painel="camadas" title="Camadas e mapa base"><svg><use href="#i-camadas"/></svg><span>Camadas e mapa base</span></button>
+    <button class="barra-item" data-painel="legenda" title="Legenda"><svg><use href="#i-legenda"/></svg><span>Legenda</span></button>
+    <button class="barra-item" id="btn-tela-cheia" title="Tela cheia"><svg><use href="#i-tela"/></svg><span>Tela cheia</span></button>
+    <div class="barra-espaco"></div>
+    <button class="barra-item barra-recolher" id="btn-recolher" title="Expandir ou recolher a barra" aria-expanded="false"><svg><use href="#i-recolher"/></svg><span>Recolher barra</span></button>
+  </nav>
+
+  <aside class="painel" id="painel" hidden aria-live="polite">
+    <div class="painel-cabeca">
+      <h2 class="painel-titulo" id="painel-titulo">Visão geral</h2>
+      <button class="icone-btn" id="painel-fechar" title="Fechar painel"><svg><use href="#i-fechar"/></svg></button>
+    </div>
+
+    <section class="painel-corpo" data-sec="geral">
+      <div class="geral-topo">
+        <img src="assets/escudos/3rpm.webp" alt="" class="geral-escudo" id="geral-escudo" width="56" height="63">
+        <p>Todas as rotas de escolta das três cidades ao mesmo tempo.</p>
+      </div>
+      <button class="btn btn-primario" id="btn-ver-tudo">Mostrar todas as rotas</button>
+      <div class="cidades-resumo" id="cidades-resumo"></div>
+    </section>
+
+    <section class="painel-corpo" data-sec="unidade">
+      <p class="painel-nota">Selecione uma ou mais unidades.</p>
+      <div class="lista-unidades" id="lista-unidades"></div>
+    </section>
+
+    <section class="painel-corpo" data-sec="cidade">
+      <p class="painel-nota">Selecione uma ou mais cidades.</p>
+      <div class="lista-cidades" id="lista-cidades"></div>
+    </section>
+
+    <section class="painel-corpo" data-sec="lista">
+      <label class="busca" for="busca-rota">
+        <svg><use href="#i-busca"/></svg>
+        <input id="busca-rota" type="search" placeholder="Buscar pelo nome do destino" autocomplete="off">
+      </label>
+      <p class="painel-nota" id="lista-contagem"></p>
+      <ul class="lista-rotas" id="lista-rotas"></ul>
+    </section>
+
+    <section class="painel-corpo" data-sec="indicadores">
+      <div class="ind-grade" id="ind-grade"></div>
+      <h3 class="sub">Por modalidade</h3><div class="barras" id="ind-modalidade"></div>
+      <h3 class="sub">Por cidade</h3><div class="barras" id="ind-cidade"></div>
+      <h3 class="sub">Por unidade</h3><div class="barras" id="ind-unidade"></div>
+      <h3 class="sub">Extremos</h3><div class="extremos" id="ind-extremos"></div>
+    </section>
+
+    <section class="painel-corpo" data-sec="camadas">
+      <div id="bloco-mapa-base">
+        <h3 class="sub">Mapa base</h3>
+        <div class="seg" id="seg-mapa-base" role="radiogroup" aria-label="Mapa base"></div>
+        <label class="chave"><input type="checkbox" id="chk-relevo"><span>Relevo sombreado</span></label>
+      </div>
+      <p class="painel-nota aviso" id="aviso-sem-base" hidden>Esta prévia não carrega o mapa de fundo. Abra o arquivo do mapa no navegador para ver ruas, satélite e relevo.</p>
+      <h3 class="sub">Camadas</h3>
+      <label class="chave"><input type="checkbox" id="chk-rotas" checked><span>Rotas</span></label>
+      <label class="chave"><input type="checkbox" id="chk-fluxo" checked><span>Animação do sentido (origem para destino)</span></label>
+      <p class="painel-nota">Com uma rota selecionada, só ela fica animada e em destaque; as demais ficam transparentes.</p>
+      <label class="chave"><input type="checkbox" id="chk-destinos" checked><span>Destinos (locais de votação)</span></label>
+      <label class="chave"><input type="checkbox" id="chk-origens" checked><span>Pontos de origem</span></label>
+    </section>
+
+    <section class="painel-corpo" data-sec="legenda">
+      <h3 class="sub">Modalidade de escolta</h3>
+      <div class="legenda" id="legenda-modalidades"></div>
+      <h3 class="sub">Traçado</h3>
+      <div class="legenda">
+        <div class="leg-item"><span class="leg-linha leg-sel" id="leg-sel"><i></i></span>Rota selecionada, com o sentido animado</div>
+        <div class="leg-item"><span class="leg-linha leg-apagada"></span>Rotas não selecionadas (transparentes)</div>
+        <div class="leg-item"><span class="leg-linha"></span>Rota pelo traçado das vias</div>
+        <div class="leg-item"><span class="leg-linha leg-tracejada"></span>Rota não calculada (linha reta)</div>
+        <div class="leg-item"><span class="leg-fluxo"></span>Sentido do deslocamento</div>
+      </div>
+      <h3 class="sub">Pontos</h3>
+      <div class="legenda">
+        <div class="leg-item"><img src="assets/escudos/52bpm.webp" alt="" class="leg-escudo" id="leg-escudo" width="22" height="25">Ponto de origem da cidade</div>
+        <div class="leg-item"><span class="leg-ponto"></span>Destino (local de votação)</div>
+        <div class="leg-item"><span class="leg-ponto leg-vazio"></span>Destino sem rota de escolta em 2026</div>
+      </div>
+      <p class="painel-nota" id="legenda-fonte"></p>
+    </section>
+  </aside>
+
+  <main class="mapa" id="mapa" aria-label="Mapa das rotas de escolta"></main>
+
+  <article class="cartao" id="cartao" hidden>
+    <button class="icone-btn cartao-fechar" id="cartao-fechar" title="Fechar"><svg><use href="#i-fechar"/></svg></button>
+    <div id="cartao-conteudo"></div>
+  </article>
+
+  <div class="aviso-mapa" id="aviso-mapa" hidden role="status">
+    <span>Não foi possível carregar o mapa de fundo. Verifique a conexão com a internet ou troque o mapa base em Camadas.</span>
+    <button class="icone-btn" id="aviso-mapa-fechar" title="Fechar aviso"><svg><use href="#i-fechar"/></svg></button>
+  </div>
+
+  <div class="carregando" id="carregando">Carregando rotas…</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

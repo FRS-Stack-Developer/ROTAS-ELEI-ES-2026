@@ -1,0 +1,37 @@
+{
+ "regiao": {
+  "id": "3rpm",
+  "nome": "3ª RPM",
+  "escudo": "assets/escudos/3rpm.webp"
+ },
+ "unidades": [
+  {
+   "id": "52bpm",
+   "nome": "52º BPM",
+   "tipo": "BPM",
+   "pai": "3rpm",
+   "escudo": "assets/escudos/52bpm.webp"
+  },
+  {
+   "id": "248cia",
+   "nome": "248ª Cia PM",
+   "tipo": "CIA",
+   "pai": "52bpm",
+   "escudo": "assets/escudos/52bpm.webp"
+  },
+  {
+   "id": "239cia",
+   "nome": "239ª Cia PM",
+   "tipo": "CIA",
+   "pai": "52bpm",
+   "escudo": "assets/escudos/52bpm.webp"
+  },
+  {
+   "id": "250cia",
+   "nome": "250ª Cia PM",
+   "tipo": "CIA",
+   "pai": "52bpm",
+   "escudo": "assets/escudos/52bpm.webp"
+  }
+ ]
+}
