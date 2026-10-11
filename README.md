@@ -5,13 +5,20 @@ Mapa interativo que mostra como foi feita a escolta das urnas eletrônicas em Ou
 O que o mapa mostra:
 
 - 3 pontos de origem, um por cidade, com o escudo da unidade.
-- 131 destinos (locais de votação) e 122 rotas de escolta de 2026, desenhadas pelo traçado real das vias.
+- 131 destinos (locais de votação), todos com rota: as 122 rotas de escolta de 2026 da planilha, desenhadas pelo traçado real das vias, mais uma rota criada para cada local que não aparece na planilha de 2026.
+- Cores das rotas:
+  - **Verde**: rota de escolta da planilha de 2026, sem problema.
+  - **Vermelho**: rota que não existia nos registros (local sem rota na planilha de 2026), criada no mapa da origem da cidade até o local.
+  - **Amarelo**: problema de georreferenciamento: o traçado pelas vias termina a 100 m ou mais do local (via não mapeada ou coordenada a conferir), coordenada com pendência em aberto na aba PENDENCIAS ou rota não calculada.
+  - O local com problema aparece com o ponto na mesma cor, e a descrição fica no cartão e no painel de Indicadores.
+- Avisos que não mudam a cor: menos urnas entregues do que seções do TSE (possível entrega não lançada no sistema) e outras pendências em aberto.
+- Quando a escola fica fora de uma via mapeada, o trecho final até ela aparece tracejado, para que todo local tenha a rota chegando nele.
 - Animação do sentido do deslocamento (origem para destino).
-- Rota selecionada em vermelho, com o sentido animado e as paradas numeradas na ordem. As demais rotas ficam transparentes e param de animar.
-- Cor da rota conforme a modalidade de escolta: viatura PM, policial embarcado no veículo do TRE ou modalidade não informada.
+- Rota selecionada em azul, com o sentido animado e as paradas numeradas na ordem. As demais rotas ficam transparentes e param de animar.
+- Lista de rotas com a opção de mostrar só as rotas com problema.
 - Filtros por visão geral da 3ª RPM, por unidade (52º BPM e Cias) e por cidade, com enquadramento automático.
 - Lista de rotas com busca pelo nome do destino, cartões de detalhe e painel de indicadores.
-- Mapa real de fundo com a mesma tecnologia do painel do PPAG (Leaflet com OpenStreetMap): ruas, satélite, claro ou escuro, com relevo sombreado opcional.
+- Mapa real de fundo com a mesma tecnologia do painel do PPAG (Leaflet com OpenStreetMap), trocado pelo seletor no canto superior direito do mapa: Ruas, Satélite (com nomes), Relevo (curvas de nível e sombreado), Claro e Escuro, mais a opção de sombreado do relevo por cima de qualquer mapa.
 
 ## Estrutura da pasta
 
@@ -60,8 +67,9 @@ A fonte dos dados é a planilha `BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx`, com as 
    ```
 2. Na pasta do projeto, rode:
    ```
-   python scripts/gerar_dados.py --planilha "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx"
+   python scripts/gerar_dados.py --planilha "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --tse "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\Secoes_eleitorais_2026_18municipios.xlsx"
    ```
+   O `--tse` é opcional: com ele, o script compara as urnas entregues em cada local com as seções que funcionam no TSE e anota um aviso quando faltam urnas.
 3. O script mostra quantas rotas e destinos gerou por cidade e lista as pendências (local sem coordenada, rota não calculada).
 4. Para atualizar também o arquivo único (o de duplo clique), rode:
    ```
@@ -73,7 +81,11 @@ Como funciona o cálculo das rotas:
 
 - O traçado vem do OSRM (servidor público `router.project-osrm.org`, perfil carro). Cada traçado calculado fica guardado em `scripts/cache_rotas.json` e não é pedido de novo.
 - Só são calculadas rotas novas ou que mudaram de coordenada. Sem internet, ou com `--sem-rede`, a rota nova sai como linha reta tracejada e marcada como **rota não calculada**.
-- A modalidade de escolta vem da coluna `MODALIDADE` da aba `ROTAS_2026`, com os valores `VIATURA PM` ou `EMBARCADO TRE`. Em branco, a rota aparece como "modalidade não informada".
+- Todo local da aba `LOCAIS` recebe uma rota. O local que não aparece em `PARADAS_2026` ganha uma rota criada da origem da cidade até ele (identificada como `ROTA CRIADA` e desenhada em vermelho).
+- O trecho final até o local é desenhado tracejado quando o traçado pelas vias termina a 15 m ou mais dele; a partir de 100 m a rota fica amarela (problema de georreferenciamento). Os dois limites ficam no início do `scripts/gerar_dados.py` (`LIGACAO_MIN_M` e `LIGACAO_PROBLEMA_M`).
+- Pendência em aberto na aba `PENDENCIAS` (coluna `RESOLVIDO` diferente de SIM) com tipo de coordenada deixa a rota amarela; os outros tipos entram como aviso.
+- As cores ficam no `js/config.js` (`cores`).
+- A modalidade de escolta vem da coluna `MODALIDADE` da aba `ROTAS_2026`, com os valores `VIATURA PM` ou `EMBARCADO TRE`. Em branco, a rota aparece como "modalidade não informada" no cartão.
 - Os campos sensíveis (equipe, viatura, placa, horários, nomes de militares, telefones) nunca são exportados para os arquivos do site. No `js/config.js`, a opção `ocultarCamposSensiveis` também os esconde dos cartões.
 
 ### Cenário otimizado (etapa futura)
@@ -98,8 +110,8 @@ Para testar a versão site (`index.html`), abrir direto não funciona, porque o 
 ## Créditos e licenças
 
 - Mapa: Leaflet 1.9.4 (licença BSD de 2 cláusulas, texto em `assets/lib/leaflet-1.9.4/LICENSE`).
-- Mapas base: OpenStreetMap (ruas, no site publicado), Esri World Street Map (ruas, no arquivo aberto da pasta), Esri World Light Gray e World Dark Gray (claro e escuro) e Esri World Imagery, World Transportation e World Boundaries and Places (satélite com nomes).
-- Relevo sombreado: Esri World Hillshade.
+- Mapas base: OpenStreetMap (ruas, no site publicado), Esri World Street Map (ruas, no arquivo aberto da pasta), OpenTopoMap (relevo, com Esri World Topo Map como reserva automática se o OpenTopoMap não responder), Esri World Light Gray e World Dark Gray (claro e escuro) e Esri World Imagery, World Transportation e World Boundaries and Places (satélite com nomes).
+- Sombreado do relevo: Esri World Hillshade.
 - Traçado das rotas: OSRM, com dados OpenStreetMap.
 - Locais de votação: TSE, arquivo de 10/09/2026.
 - Fonte Rawline (derivada da Raleway, SIL Open Font License).
