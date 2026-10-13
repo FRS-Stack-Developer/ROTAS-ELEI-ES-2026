@@ -5,6 +5,10 @@ Mapa interativo que mostra como foi feita a escolta das urnas eletrônicas em Ou
 O que o mapa mostra:
 
 - 3 pontos de origem, um por cidade, com o escudo da unidade.
+- Os locais de votação das demais UEOp da 3ª RPM e de Diogo de Vasconcelos (52º BPM), só os pontos, ainda sem rotas: vêm da planilha do TSE (`--tse`), apenas os com situação ATIVO. A UEOp de cada município segue a aba "Resumo por município". Locais sem coordenada, ou com coordenada fora das áreas das UEOp, não entram e são listados pelo script.
+- Todos os 418 locais de votação com situação ATIVO dos 18 municípios (sede, distritos, povoados e zona rural), conforme a planilha do TSE. Os que vêm sem coordenada, ou com coordenada errada, usam a aba `COORD_TSE` da planilha base (coordenada aproximada pelo CEP ou pela rua, em amarelo no mapa até ser conferida: marcar SIM em `CONFERIDO`).
+- Chaves para ligar e desligar os locais de votação de cada UEOp (painel de Camadas) e, na parte de baixo do mapa, cartões com o total de locais de votação e de eleitores da 3ª RPM e de cada UEOp. Clicar no cartão liga ou desliga os pontos daquela UEOp.
+- Os cartórios eleitorais das outras UEOp da 3ª RPM (1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind), com o escudo de cada uma. Ficam na aba `PONTOS_SAIDA` (colunas extras `ZONA_ELEITORAL`, `MUNICIPIOS_ATENDIDOS`, `TELEFONE`, `EMAIL` e `FONTE`) e aparecem no mapa sem rotas. Os endereços vêm da consulta oficial do TRE-MG (cartorios-eleitorais.tre-mg.jus.br).
 - 131 destinos (locais de votação), todos com rota: as 122 rotas de escolta de 2026 da planilha, desenhadas pelo traçado real das vias, mais uma rota criada para cada local que não aparece na planilha de 2026.
 - Cores das rotas:
   - **Verde**: rota de escolta da planilha de 2026, sem problema.
