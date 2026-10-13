@@ -13,6 +13,7 @@ O que o mapa mostra:
   - O local com problema aparece com o ponto na mesma cor, e a descrição fica no cartão e no painel de Indicadores.
 - Avisos que não mudam a cor: menos urnas entregues do que seções do TSE (possível entrega não lançada no sistema) e outras pendências em aberto.
 - Quando a escola fica fora de uma via mapeada, o trecho final até ela aparece tracejado, para que todo local tenha a rota chegando nele.
+- Limites das áreas das UEOp da 3ª RPM (52º BPM, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind): só as linhas de divisa, sem preenchimento, com o nome de cada área. A cor da linha acompanha o mapa de fundo: escura em Ruas, Relevo e Claro, branca em Satélite e Escuro (ajustável em `js/config.js`, `ueops.estiloPorMapa`). A área do 52º BPM tem a linha um pouco mais grossa. Liga e desliga no painel de Camadas.
 - Animação do sentido do deslocamento (origem para destino).
 - Rota selecionada em azul, com o sentido animado e as paradas numeradas na ordem. As demais rotas ficam transparentes e param de animar.
 - Lista de rotas com a opção de mostrar só as rotas com problema.
@@ -71,11 +72,16 @@ A fonte dos dados é a planilha `BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx`, com as 
    ```
    O `--tse` é opcional: com ele, o script compara as urnas entregues em cada local com as seções que funcionam no TSE e anota um aviso quando faltam urnas.
 3. O script mostra quantas rotas e destinos gerou por cidade e lista as pendências (local sem coordenada, rota não calculada).
-4. Para atualizar também o arquivo único (o de duplo clique), rode:
+4. Se o arquivo de limites das UEOp mudar (UEOPS.geojson exportado do Google Earth), rode:
+   ```
+   python scripts/gerar_ueops.py --arquivo "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\UEOPS.geojson"
+   ```
+   O script grava `data/ueops.geojson` com o desenho simplificado (precisão de cerca de 10 m) e só o nome de cada área.
+5. Para atualizar também o arquivo único (o de duplo clique), rode:
    ```
    python scripts/montar_arquivo_unico.py
    ```
-5. Suba de novo os arquivos da pasta `data/`, o `scripts/cache_rotas.json` e o `mapa-escolta-urnas-3rpm.html` para o GitHub.
+6. Suba de novo os arquivos da pasta `data/`, o `scripts/cache_rotas.json` e o `mapa-escolta-urnas-3rpm.html` para o GitHub.
 
 Como funciona o cálculo das rotas:
 
