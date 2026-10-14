@@ -18,6 +18,7 @@ O que o mapa mostra:
 - Avisos que não mudam a cor: menos urnas entregues do que seções do TSE (possível entrega não lançada no sistema) e outras pendências em aberto.
 - Quando a escola fica fora de uma via mapeada, o trecho final até ela aparece tracejado, para que todo local tenha a rota chegando nele.
 - Limites das áreas das UEOp da 3ª RPM (52º BPM, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind): só as linhas de divisa, sem preenchimento, com o nome de cada área. A cor da linha acompanha o mapa de fundo: escura em Ruas, Relevo e Claro, branca em Satélite e Escuro (ajustável em `js/config.js`, `ueops.estiloPorMapa`). A área do 52º BPM tem a linha um pouco mais grossa. Liga e desliga no painel de Camadas.
+- Divisa do estado de Minas Gerais, em linha tracejada mais grossa, com as mesmas cores das divisas das UEOp. Afaste o mapa para ver o estado inteiro. Liga e desliga no painel de Camadas. Vem da malha municipal do IBGE (municípios de MG unidos num contorno só).
 - Animação do sentido do deslocamento (origem para destino).
 - Rota selecionada em azul, com o sentido animado e as paradas numeradas na ordem. As demais rotas ficam transparentes e param de animar.
 - Lista de rotas com a opção de mostrar só as rotas com problema.
@@ -81,6 +82,10 @@ A fonte dos dados é a planilha `BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx`, com as 
    python scripts/gerar_ueops.py --arquivo "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\UEOPS.geojson"
    ```
    O script grava `data/ueops.geojson` com o desenho simplificado (precisão de cerca de 10 m) e só o nome de cada área.
+   A divisa de Minas Gerais (`data/minas-gerais.geojson`) é gerada uma vez a partir da malha municipal do IBGE (arquivo `MUNICIPIOS_MINAS_GERAIS.geojson`, do projeto geodata-br) e não precisa ser refeita. Se quiser refazer (requer `pip install shapely`):
+   ```
+   python scripts/gerar_limite_estado.py --arquivo "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\MUNICIPIOS_MINAS_GERAIS.geojson"
+   ```
 5. Para atualizar também o arquivo único (o de duplo clique), rode:
    ```
    python scripts/montar_arquivo_unico.py
@@ -124,5 +129,6 @@ Para testar a versão site (`index.html`), abrir direto não funciona, porque o 
 - Sombreado do relevo: Esri World Hillshade.
 - Traçado das rotas: OSRM, com dados OpenStreetMap.
 - Locais de votação: TSE, arquivo de 10/09/2026.
+- Divisa de Minas Gerais: IBGE, malha municipal (projeto geodata-br, domínio público).
 - Fonte Rawline (derivada da Raleway, SIL Open Font License).
 - Escudos: Polícia Militar de Minas Gerais, 3ª RPM e 52º BPM.
