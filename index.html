@@ -943,6 +943,13 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 .mapa .marcador-origem .anel img { width: 30px; height: auto; }
 .marcador-origem .rotulo { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); padding: 1px 7px; border-radius: 4px; background: var(--preto); color: var(--caqui-forte); font-family: var(--fonte-titulo); font-weight: 600;
   font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+/* cartórios das outras UEOp: só o escudo, sem anel, com uma sombra leve para separar do mapa */
+.marcador-origem.cartorio .escudo { width: 100%; height: 100%; display: grid; place-items: center; }
+.mapa .marcador-origem.cartorio .escudo img { width: 26px; height: auto; filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .55)) drop-shadow(0 0 1px rgba(255, 255, 255, .6)); transition: width .15s; }
+.mapa.mapa-longe .marcador-origem.cartorio .escudo img { width: 18px; }
+.marcador-origem.cartorio .rotulo { top: 33px; padding: 0 5px; font-size: 9.5px; }
+/* com a região inteira na tela, os nomes dos cartórios se sobrepõem: ficam ocultos até aproximar (o nome aparece ao passar o mouse) */
+.mapa.mapa-longe .marcador-origem.cartorio .rotulo { display: none; }
 
 .carregando { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 10px 16px; border-radius: 8px; background: var(--painel); border: 1px solid var(--borda); z-index: 40; }
 
@@ -1613,6 +1620,11 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     const b = limites([...rotas, ...destinos, ...origens.filter((o) => !o.properties.contexto)]);
     mapa.fitBounds([[b[1], b[0]], [b[3], b[2]]], { animate: false, padding: [40, 40] });
 
+    // mapa afastado (região inteira): escudos dos cartórios menores
+    const marcarDistancia = () => el.classList.toggle("mapa-longe", mapa.getZoom() < 10);
+    mapa.on("zoomend", marcarDistancia);
+    marcarDistancia();
+
     aplicarBase();
     criarEstado();
     criarAreas();
@@ -1839,10 +1851,11 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
 
   function criarMarcadorOrigem(o) {
     const p = o.properties, u = unidades[p.unidade] || unidades[p.bpm];
-    const icone = L.divIcon({
-      className: "marcador-origem", iconSize: [46, 46], iconAnchor: [23, 23],
-      html: '<span class="anel"><img alt="" src="' + esc(asset(u ? u.escudo : regiao.escudo)) + '"></span><span class="rotulo">' + esc(p.rotulo || p.municipio) + "</span>"
-    });
+    const img = '<img alt="" src="' + esc(asset(u ? u.escudo : regiao.escudo)) + '">', rot = '<span class="rotulo">' + esc(p.rotulo || p.municipio) + "</span>";
+    // cartórios das outras UEOp: só o escudo, sem o anel redondo, menor (e menor ainda com o mapa afastado)
+    const icone = p.contexto
+      ? L.divIcon({ className: "marcador-origem cartorio", iconSize: [28, 32], iconAnchor: [14, 16], html: '<span class="escudo">' + img + "</span>" + rot })
+      : L.divIcon({ className: "marcador-origem", iconSize: [46, 46], iconAnchor: [23, 23], html: '<span class="anel">' + img + "</span>" + rot });
     const m = L.marker(ll(o.geometry.coordinates), { icon: icone, title: (p.contexto ? "Cartório eleitoral " : "Origem ") + (p.rotulo || p.municipio), riseOnHover: true, keyboard: true });
     m.on("click", () => mostrarOrigem(p.id));
     marcadoresOrigem[p.id] = m;
