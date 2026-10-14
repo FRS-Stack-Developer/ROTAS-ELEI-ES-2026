@@ -876,6 +876,8 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
   font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cor-area, #1d1a12);
   text-shadow: 0 0 2px var(--cor-area-contorno, #fff), 0 0 3px var(--cor-area-contorno, #fff), 0 0 6px var(--cor-area-contorno, #fff); }
 .rotulo-ueop.destaque span { font-size: 13px; }
+/* UEOp em foco (cartão da gaveta): os nomes das outras áreas ficam mais claros */
+.rotulo-ueop.apagado span { opacity: .5; }
 
 /* Cartão de detalhe */
 .cartao { position: absolute; top: calc(var(--topo-h) + env(safe-area-inset-top, 0px) + 12px); right: 12px; width: 350px; max-height: calc(100% - var(--topo-h) - 24px);
@@ -1047,11 +1049,12 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 .gaveta-topo { display: flex; flex-direction: column; gap: 2px; padding: 0 2px 4px; border-bottom: 1px solid var(--borda); }
 .faixa-titulo { font-family: var(--fonte-titulo); font-weight: 700; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--caqui); }
 .faixa-dica { color: var(--texto-2); font-size: 12px; }
-.faixa-cards { display: flex; flex-direction: column; gap: 5px; overflow-y: auto; min-height: 0; padding: 2px; scrollbar-width: thin; }
+.faixa-cards { position: relative; display: flex; flex-direction: column; gap: 5px; overflow-y: auto; min-height: 0; padding: 2px; scrollbar-width: thin; }
+.ueop-item { display: flex; flex-direction: column; flex: 0 0 auto; }
 .gaveta-nota { margin: 0; padding: 2px 2px 0; font-size: 11.5px; line-height: 1.4; color: var(--texto-2); }
-.ueop-card { position: relative; display: flex; align-items: center; gap: 10px; flex: 0 0 auto; width: 100%; padding: 6px 14px 6px 10px; text-align: left;
+.ueop-card { position: relative; display: flex; align-items: center; gap: 10px; flex: 0 0 auto; width: 100%; padding: 6px 26px 6px 10px; text-align: left;
   background: var(--superficie-2, var(--painel)); border: 1px solid var(--borda); border-radius: var(--raio); color: var(--texto); cursor: pointer;
-  transition: opacity .15s ease, border-color .15s ease, filter .15s ease; }
+  transition: opacity .15s ease, border-color .15s ease, box-shadow .15s ease, background-color .15s ease; }
 .ueop-card:hover { border-color: var(--caqui-escuro); }
 .ueop-card:focus-visible { outline: 2px solid var(--caqui); outline-offset: 2px; }
 .ueop-card img { width: 30px; height: auto; flex: none; }
@@ -1061,10 +1064,24 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 .ueop-num b { color: var(--texto); font-size: 13.5px; font-weight: 700; }
 .ueop-obs { font-size: 11px; color: var(--alerta); white-space: nowrap; }
 .ueop-bloq { font-size: 11px; color: var(--texto-2); white-space: nowrap; }
-.ueop-estado { position: absolute; top: 7px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--cor-normal, #2DBE4F); box-shadow: 0 0 0 2px var(--painel); }
-.ueop-card[aria-pressed="false"] { opacity: .5; filter: grayscale(.85); }
-.ueop-card[aria-pressed="false"] .ueop-estado { background: var(--texto-2); }
+/* seta à direita: gira quando as informações do cartão estão abertas */
+.ueop-seta { position: absolute; right: 10px; top: 50%; width: 7px; height: 7px; margin-top: -5px; border-right: 2px solid var(--texto-2); border-bottom: 2px solid var(--texto-2);
+  transform: rotate(-45deg); transition: transform .2s ease, border-color .15s ease; }
+.ueop-card[aria-expanded="true"] .ueop-seta { transform: rotate(45deg); margin-top: -6px; border-color: var(--caqui); }
 .ueop-total { border-color: var(--caqui-escuro); }
+/* UEOp mostrada no mapa (ou a 3ª RPM, com todas): borda e faixa na cor caqui */
+.ueop-card[aria-pressed="true"] { border-color: var(--caqui); background: color-mix(in srgb, var(--caqui) 14%, var(--superficie-2, var(--painel))); box-shadow: inset 3px 0 0 var(--caqui); }
+/* pontos da UEOp desligados no painel de Camadas */
+.ueop-card.desligada { opacity: .55; }
+.ueop-detalhe { margin: 4px 2px 3px 14px; padding: 6px 8px 6px 10px; border-left: 2px solid var(--caqui); font-size: 12px; line-height: 1.35; }
+.campos.empilhados { grid-template-columns: 1fr; gap: 1px; }
+.campos.empilhados dt { margin-top: 7px; font-family: var(--fonte-titulo); font-weight: 700; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--caqui); }
+.campos.empilhados dt:first-child { margin-top: 0; }
+.campos.empilhados dd { text-align: left; }
+.ueop-detalhe .campos.empilhados dd { font-size: 12px; }
+.lista-det { margin: 0; padding: 0; list-style: none; }
+.lista-det li { padding: 1px 0; }
+.lista-det b { font-weight: 700; color: var(--texto); }
 
 /* aviso quando o mapa de fundo não carrega */
 .aviso-mapa { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; max-width: min(560px, calc(100% - 100px));
@@ -1207,7 +1224,7 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
 
       <label class="chave"><input type="checkbox" id="chk-origens" checked><span>Pontos de origem</span></label>
       <h3 class="sub">Locais de votação por UEOp</h3>
-      <p class="painel-nota">Liga e desliga os locais de votação de cada UEOp. Os cartões da aba Eleitores, na borda direita do mapa, fazem o mesmo.</p>
+      <p class="painel-nota">Liga e desliga os locais de votação de cada UEOp. Na aba Eleitores, na borda direita do mapa, o clique numa unidade mostra só ela e aproxima o mapa da área dela.</p>
       <div class="lista-opcoes" id="lista-ueop-locais"></div>
       <div id="bloco-ueops" hidden>
         <label class="chave"><input type="checkbox" id="chk-ueops" checked><span>Limites das áreas das UEOp</span></label>
@@ -1257,7 +1274,7 @@ button svg, label svg { width: 20px; height: 20px; fill: none; stroke: currentCo
     <div class="gaveta-corpo" id="gaveta-corpo" inert>
       <div class="gaveta-topo">
         <span class="faixa-titulo">Locais e eleitores por UEOp</span>
-        <span class="faixa-dica">Clique para ligar ou desligar os pontos</span>
+        <span class="faixa-dica">Clique numa unidade para ver só ela no mapa</span>
       </div>
       <div class="faixa-cards" id="faixa-cards"></div>
       <p class="gaveta-nota" id="gaveta-nota"></p>
@@ -1470,8 +1487,10 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     base: C.mapaBase.padrao, sombreado: false,
     fluxo: !!C.animacaoFluxo,
     camadas: { rotas: true, origens: true, ueops: !!(C.ueops && C.ueops.mostrar), estado: !!(C.estado && C.estado.mostrar) },
-    // UEOp com os locais de votação desligados (chaves do painel de Camadas e cartões da gaveta da direita)
+    // UEOp com os locais de votação desligados (chaves do painel de Camadas)
     ocultas: new Set(),
+    // UEOp em foco (cartão clicado na gaveta da direita): só ela aparece no mapa. null = todas
+    foco: null,
     busca: "", soProblemas: false
   };
   let mapa, unidades = {}, regiao = null, rotas = [], destinos = [], origens = [];
@@ -1565,6 +1584,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     return passaFiltro(p) || visRotas.some((r) => r.properties.id_saida === p.id);
   }
   function passaFiltro(p) {
+    if (estado.foco) return p.bpm === estado.foco;
     if (estado.modo === "cidade" && estado.cidades.size) return estado.cidades.has(p.municipio);
     if (estado.modo === "unidade" && estado.unidades.size) return estado.unidades.has(p.unidade);
     return true;
@@ -1584,6 +1604,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   }
 
   function textoFiltro() {
+    if (estado.foco) return "UEOp: " + (unidades[estado.foco] ? unidades[estado.foco].nome : estado.foco);
     if (estado.modo === "cidade" && estado.cidades.size) return "Cidade: " + Array.from(estado.cidades).join(", ");
     if (estado.modo === "unidade" && estado.unidades.size) {
       const nomes = [];
@@ -1600,9 +1621,10 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     return "Visão geral " + (regiao ? regiao.nome : "");
   }
 
-  function definirGeral() { estado.modo = "geral"; estado.cidades.clear(); estado.unidades.clear(); fecharCartao(); aplicarFiltros(); }
-  function definirCidades(lista) { estado.modo = lista.length ? "cidade" : "geral"; estado.cidades = new Set(lista); estado.unidades.clear(); fecharCartao(); aplicarFiltros(); }
-  function definirUnidades(lista) { estado.modo = lista.length ? "unidade" : "geral"; estado.unidades = new Set(lista); estado.cidades.clear(); fecharCartao(); aplicarFiltros(); }
+  // os filtros de cidade e de unidade (e a visão geral) tiram o foco da UEOp
+  function definirGeral() { limparFoco(); estado.modo = "geral"; estado.cidades.clear(); estado.unidades.clear(); fecharCartao(); aplicarFiltros(); }
+  function definirCidades(lista) { limparFoco(); estado.modo = lista.length ? "cidade" : "geral"; estado.cidades = new Set(lista); estado.unidades.clear(); fecharCartao(); aplicarFiltros(); }
+  function definirUnidades(lista) { limparFoco(); estado.modo = lista.length ? "unidade" : "geral"; estado.unidades = new Set(lista); estado.cidades.clear(); fecharCartao(); aplicarFiltros(); }
 
   /* ---------- cores ---------- */
   const baseEscura = () => C.mapaBaseDisponivel && !!(C.mapaBase.opcoes[estado.base] || {}).escuro;
@@ -1802,6 +1824,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     grupoEstado = L.layerGroup(camadas);
     recolorirAreas();
   }
+  const iconeRotuloUeop = (p, dest, apagado) => L.divIcon({ className: "rotulo-ueop" + (dest ? " destaque" : "") + (apagado ? " apagado" : ""), html: "<span>" + esc(p.nome) + "</span>", iconSize: null });
   function criarAreas() {
     if (!areasUeop) return;
     const U = C.ueops;
@@ -1814,12 +1837,32 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
       const contorno = L.polygon(coords, Object.assign({}, base, { weight: dest ? 5 : 4, opacity: 0.6, fill: false }));
       const linha = L.polygon(coords, Object.assign({}, base, { weight: dest ? 2.6 : 1.8, opacity: 1, fill: false }));
       camadas.push(contorno, linha);
-      linhasAreas.push({ contorno, linha });
-      if (p.rotulo) camadas.push(L.marker(ll(p.rotulo), { pane: "areasRotulos", interactive: false, keyboard: false,
-        icon: L.divIcon({ className: "rotulo-ueop" + (dest ? " destaque" : ""), html: "<span>" + esc(p.nome) + "</span>", iconSize: null }) }));
+      const item = { id: p.id, p, contorno, linha, rotulo: null };
+      if (p.rotulo) {
+        item.rotulo = L.marker(ll(p.rotulo), { pane: "areasRotulos", interactive: false, keyboard: false, icon: iconeRotuloUeop(p, dest, false) });
+        camadas.push(item.rotulo);
+      }
+      linhasAreas.push(item);
     });
     grupoAreas = L.layerGroup(camadas);
     recolorirAreas();
+  }
+  /* UEOp em foco: a divisa dela fica mais grossa e por cima; as outras ficam mais claras. Sem foco, volta o destaque do 52º BPM */
+  let alvoAreas = null;
+  function estilizarAreas() {
+    if (!linhasAreas.length) return;
+    const alvo = estado.foco || C.ueops.destaque;
+    const mudou = alvo + "|" + !!estado.foco !== alvoAreas;
+    alvoAreas = alvo + "|" + !!estado.foco;
+    linhasAreas.forEach((a) => {
+      const dest = a.id === alvo, apagado = !!estado.foco && !dest;
+      if (mudou) {
+        a.contorno.setStyle({ weight: dest ? 5 : 4, opacity: apagado ? 0.3 : 0.6 });
+        a.linha.setStyle({ weight: dest ? 2.6 : 1.8, opacity: apagado ? 0.45 : 1 });
+        if (a.rotulo) a.rotulo.setIcon(iconeRotuloUeop(a.p, dest, apagado));
+      }
+      if (dest) { a.contorno.bringToFront(); a.linha.bringToFront(); }
+    });
   }
 
   function criarRotas() {
@@ -1897,7 +1940,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     const vd = new Set(visDestinos.map((f) => f.properties.id));
     destinos.forEach((f) => poe(circulos[f.properties.id], ueopVisivel(f.properties) && vd.has(f.properties.id)));
     origens.forEach((o) => poe(marcadoresOrigem[o.properties.id], estado.camadas.origens && origemVisivel(o.properties)));
-    if (grupoAreas) poe(grupoAreas, estado.camadas.ueops);
+    if (grupoAreas) { poe(grupoAreas, estado.camadas.ueops); estilizarAreas(); }
     if (grupoEstado) poe(grupoEstado, estado.camadas.estado);
     locaisCtx.forEach((f) => poe(marcCtx[f.properties.id], ueopVisivel(f.properties) && passaFiltro(f.properties)));
     $("#mapa").classList.toggle("sem-fluxo", !estado.fluxo);
@@ -1953,7 +1996,9 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   function limites(feats) {
     let b = null;
     const add = (c) => { if (!b) b = [c[0], c[1], c[0], c[1]]; else { b[0] = Math.min(b[0], c[0]); b[1] = Math.min(b[1], c[1]); b[2] = Math.max(b[2], c[0]); b[3] = Math.max(b[3], c[1]); } };
-    feats.forEach((f) => { const g = f.geometry; if (g.type === "Point") add(g.coordinates); else g.coordinates.forEach(add); });
+    // ponto, linha e também os polígonos das áreas das UEOp (coordenadas aninhadas)
+    const percorrer = (c) => { if (typeof c[0] === "number") add(c); else c.forEach(percorrer); };
+    feats.forEach((f) => percorrer(f.geometry.coordinates));
     return b;
   }
 
@@ -1965,6 +2010,9 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     } else {
       if (!$("#painel").hidden) p.left = $("#painel").offsetWidth + 40;
       if (!$("#cartao").hidden) p.right = $("#cartao").offsetWidth + 40;
+      // gaveta da direita aberta (largura dela mais a aba)
+      const gav = $("#gaveta-ueop");
+      if (gav && !gav.hidden && gav.classList.contains("aberta")) p.right = Math.max(p.right, gav.offsetWidth + $("#gaveta-aba").offsetWidth + 30);
     }
     return p;
   }
@@ -1982,6 +2030,12 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     else mapa.flyToBounds(lim, Object.assign(op, { duration: 0.9 }));
   }
   function enquadrarVisiveis(dur) {
+    // UEOp em foco: a área inteira dela, centralizada (sem a área, os pontos dela)
+    if (estado.foco) {
+      const area = areasUeop && areasUeop.features.find((f) => f.properties.id === estado.foco);
+      const pts = [...visRotas, ...visDestinos, ...locaisCtx, ...origens].filter((f) => passaFiltro(f.properties));
+      if (area || pts.length) return enquadrar(area ? [area] : pts, dur);
+    }
     const oo = origens.filter((o) => origemVisivel(o.properties) && !o.properties.contexto);
     const fs = [...visRotas, ...visDestinos, ...oo];
     enquadrar(fs.length ? fs : [...rotas, ...destinos], dur);
@@ -2035,6 +2089,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     $$("#cartao-conteudo [data-destino]").forEach((b) => b.addEventListener("click", () => mostrarDestino(b.dataset.destino)));
     $$("#cartao-conteudo [data-rota]").forEach((b) => b.addEventListener("click", () => selecionarRota(b.dataset.rota, true)));
     $$("#cartao-conteudo [data-cidade]").forEach((b) => b.addEventListener("click", () => definirCidades([b.dataset.cidade])));
+    $$("#cartao-conteudo [data-foco]").forEach((b) => b.addEventListener("click", () => focarUeop(b.dataset.foco)));
   }
   function fecharCartao() {
     $("#cartao").hidden = true;
@@ -2046,7 +2101,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   function selecionarRota(id, enq) {
     const f = rotaPorId[id];
     if (!f) return;
-    if (!passaFiltro(f.properties)) { estado.modo = "geral"; estado.cidades.clear(); estado.unidades.clear(); aplicarFiltros(false); }
+    if (!passaFiltro(f.properties)) { limparFoco(); estado.modo = "geral"; estado.cidades.clear(); estado.unidades.clear(); aplicarFiltros(false); }
     estado.rotaSel = id; estado.destinoSel = null;
     const p = f.properties;
     const origem = origemPorId[p.id_saida];
@@ -2263,30 +2318,147 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     atualizarDestaque();
     sincronizarChavesUeop();
   }
+  const nLocaisUeop = (id) => [...destinos, ...locaisCtx].filter((f) => f.properties.bpm === id).length;
+  const totaisUeop = (lista) => lista.reduce((a, r) => ({ l: a.l + (r.locais_ativos || 0), e: a.e + (r.eleitores || 0), m: a.m + nLocaisUeop(r.id),
+    b: a.b + (r.bloqueados || 0), eb: a.eb + (r.eleitores_bloqueados || 0) }), { l: 0, e: 0, m: 0, b: 0, eb: 0 });
+  // cartão da gaveta aberto com as informações (o último clicado; "todas" é o da 3ª RPM)
+  let detalheUeop = null;
+
   function montarChavesUeop() {
     const lista = ueopsComLocais();
-    const nLocais = (id) => [...destinos, ...locaisCtx].filter((f) => f.properties.bpm === id).length;
     $("#lista-ueop-locais").innerHTML = '<label class="chave"><input type="checkbox" data-ueop="todas" checked><span><b>Todos os locais de votação</b></span></label>' +
       lista.map((r) => '<label class="opcao"><input type="checkbox" data-ueop="' + esc(r.id) + '" checked><img alt="" src="' + esc(asset(unidades[r.id] ? unidades[r.id].escudo : regiao.escudo)) +
-        '"><span class="opcao-texto"><b>' + esc(r.nome) + "</b><small>" + esc((r.municipios || []).join(", ")) + '</small></span><span class="opcao-num">' + nLocais(r.id) + "</span></label>").join("");
+        '"><span class="opcao-texto"><b>' + esc(r.nome) + "</b><small>" + esc((r.municipios || []).join(", ")) + '</small></span><span class="opcao-num">' + nLocaisUeop(r.id) + "</span></label>").join("");
     $$("#lista-ueop-locais input").forEach((inp) => inp.addEventListener("change", () => alternarUeop(inp.dataset.ueop, inp.checked)));
-    // gaveta do lado direito: total da 3ª RPM e um cartão por UEOp; clicar no cartão liga ou desliga os locais daquela UEOp.
+    // gaveta do lado direito: total da 3ª RPM e um cartão por UEOp. O clique no cartão mostra só aquela UEOp no mapa,
+    // aproxima e centraliza a área dela e abre as informações embaixo do cartão (no celular, no cartão de baixo).
+    // O cartão da 3ª RPM volta a mostrar todas. Ligar e desligar os pontos fica no painel de Camadas.
     // Fica escondida; a aba com a seta na borda direita abre e fecha.
     const gav = $("#gaveta-ueop");
     if (!lista.length || !resumoUeop.length) { gav.hidden = true; return; }
-    const tot = lista.reduce((a, r) => ({ l: a.l + (r.locais_ativos || 0), e: a.e + (r.eleitores || 0), m: a.m + nLocais(r.id),
-      b: a.b + (r.bloqueados || 0), eb: a.eb + (r.eleitores_bloqueados || 0) }), { l: 0, e: 0, m: 0, b: 0, eb: 0 });
-    const card = (id, nome, escudo, locais, eleitores, noMapa, bloq, elBloq, extra) => '<button type="button" class="ueop-card' + (extra || "") + '" data-ueop="' + esc(id) + '" aria-pressed="true" title="Ligar ou desligar os locais de votação de ' + esc(nome) +
+    const tot = totaisUeop(lista);
+    const card = (id, nome, escudo, locais, eleitores, noMapa, bloq, elBloq, extra) => '<div class="ueop-item" data-item="' + esc(id) + '">' +
+      '<button type="button" class="ueop-card' + (extra || "") + '" data-ueop="' + esc(id) + '" aria-pressed="false" aria-expanded="false" aria-controls="ueop-det-' + esc(id) + '" title="' +
+      (id === "todas" ? "Mostrar todas as UEOp da " + esc(nome) + " no mapa" : "Mostrar só " + esc(nome) + " no mapa, com a área centralizada") +
       (bloq ? ". Fora do mapa: " + bloq + (bloq === 1 ? " local BLOQUEADO" : " locais BLOQUEADO") + " no TSE, com " + nf0.format(elBloq) + " eleitores" : "") + '">' +
       '<img alt="" src="' + esc(asset(escudo)) + '"><span class="ueop-texto"><span class="ueop-nome">' + esc(nome) + '</span><span class="ueop-num"><b>' + nf0.format(locais) + "</b> locais, <b>" + nf0.format(eleitores) + "</b> eleitores</span>" + (noMapa !== locais ? '<span class="ueop-obs">' + nf0.format(noMapa) + " no mapa</span>" : "") +
-      (bloq ? '<span class="ueop-bloq">+' + bloq + (bloq === 1 ? " bloqueado" : " bloqueados") + " fora do mapa</span>" : "") + '</span><span class="ueop-estado"></span></button>';
+      (bloq ? '<span class="ueop-bloq">+' + bloq + (bloq === 1 ? " bloqueado" : " bloqueados") + " fora do mapa</span>" : "") + '</span><span class="ueop-seta" aria-hidden="true"></span></button>' +
+      '<div class="ueop-detalhe" id="ueop-det-' + esc(id) + '" hidden></div></div>';
     $("#faixa-cards").innerHTML = card("todas", regiao ? regiao.nome : "Total", regiao ? regiao.escudo : "", tot.l, tot.e, tot.m, tot.b, tot.eb, " ueop-total") +
-      lista.map((r) => card(r.id, r.nome, unidades[r.id] ? unidades[r.id].escudo : regiao.escudo, r.locais_ativos || 0, r.eleitores || 0, nLocais(r.id), r.bloqueados || 0, r.eleitores_bloqueados || 0)).join("");
+      lista.map((r) => card(r.id, r.nome, unidades[r.id] ? unidades[r.id].escudo : regiao.escudo, r.locais_ativos || 0, r.eleitores || 0, nLocaisUeop(r.id), r.bloqueados || 0, r.eleitores_bloqueados || 0)).join("");
     $("#gaveta-nota").textContent = "Locais ATIVO do TSE e os eleitores desses locais." +
       (tot.b ? " Fora do mapa: " + tot.b + " locais BLOQUEADO (" + nf0.format(tot.eb) + " eleitores), que também funcionam no dia." : "");
-    $$("#faixa-cards .ueop-card").forEach((b) => b.addEventListener("click", () => alternarUeop(b.dataset.ueop, b.getAttribute("aria-pressed") !== "true")));
+    $$("#faixa-cards .ueop-card").forEach((b) => b.addEventListener("click", () => focarUeop(b.dataset.ueop)));
     gav.hidden = false;
     $("#gaveta-aba").addEventListener("click", () => abrirGaveta(!gav.classList.contains("aberta")));
+    sincronizarGaveta();
+  }
+
+  /* informações da UEOp (ou da 3ª RPM inteira, id "todas"): embaixo do cartão da gaveta ou, no celular, no cartão de baixo */
+  function infoUeopHTML(id, comoCartao) {
+    const lista = ueopsComLocais();
+    const linhas = [];
+    const itens = (arr) => '<ul class="lista-det">' + arr.map((t) => "<li>" + t + "</li>").join("") + "</ul>";
+    const textoRotas = (rs) => {
+      if (!rs.length) return "ainda não lançadas no mapa";
+      const km = rs.reduce((s, f) => s + f.properties.distancia_km, 0), criadas = rs.filter((f) => f.properties.criada).length;
+      return nf0.format(rs.length) + (rs.length === 1 ? " rota" : " rotas") + (criadas ? " (" + criadas + (criadas === 1 ? " criada" : " criadas") + " no mapa)" : "") + ", " + nf1.format(km) + " km pelas vias";
+    };
+    const textoBloq = (n, el) => n + (n === 1 ? " local BLOQUEADO" : " locais BLOQUEADO") + " no TSE, com " + nf0.format(el) + " eleitores";
+    let nome, escudo, sub;
+    if (id === "todas") {
+      const tot = totaisUeop(lista);
+      const muns = new Set(lista.flatMap((r) => r.municipios || []));
+      const cartorios = origens.filter((o) => o.properties.contexto);
+      const saidas = origens.filter((o) => !o.properties.contexto);
+      const donoSaidas = [...new Set(saidas.map((o) => o.properties.bpm))].map((b) => (unidades[b] ? unidades[b].nome : b)).join(", ");
+      nome = regiao ? regiao.nome : "Região"; escudo = regiao ? regiao.escudo : ""; sub = "Todas as UEOp no mapa";
+      linhas.push(["UEOp", nf0.format(lista.length) + ": " + lista.map((r) => esc(r.nome)).join(", ")]);
+      linhas.push(["Municípios", nf0.format(muns.size)]);
+      if (comoCartao) { linhas.push(["Locais de votação ATIVO", nf0.format(tot.l)]); linhas.push(["Eleitores", nf0.format(tot.e)]); }
+      if (tot.b) linhas.push(["Fora do mapa", textoBloq(tot.b, tot.eb)]);
+      linhas.push(["Cartórios eleitorais", nf0.format(cartorios.length) + " nas demais UEOp"]);
+      if (saidas.length) linhas.push(["Pontos de saída das rotas", nf0.format(saidas.length) + (donoSaidas ? " do " + esc(donoSaidas) : "")]);
+      linhas.push(["Rotas de escolta", textoRotas(rotas)]);
+    } else {
+      const r = lista.find((x) => x.id === id) || { id, nome: unidades[id] ? unidades[id].nome : id };
+      nome = r.nome; escudo = unidades[id] ? unidades[id].escudo : (regiao ? regiao.escudo : ""); sub = "Só esta UEOp no mapa";
+      // locais e eleitores por município (a soma bate com o total do cartão)
+      const porMun = new Map();
+      (r.municipios || []).forEach((m) => porMun.set(m, { n: 0, e: 0 }));
+      [...destinos, ...locaisCtx].filter((f) => f.properties.bpm === id).forEach((f) => {
+        const m = f.properties.municipio;
+        if (!porMun.has(m)) porMun.set(m, { n: 0, e: 0 });
+        const g = porMun.get(m); g.n++; g.e += f.properties.eleitores || 0;
+      });
+      linhas.push([porMun.size === 1 ? "Município" : "Municípios", itens([...porMun].map(([m, g]) => "<b>" + esc(m) + "</b>: " + nf0.format(g.n) + (g.n === 1 ? " local" : " locais") + ", " + nf0.format(g.e) + " eleitores"))]);
+      if (comoCartao) { linhas.push(["Locais de votação ATIVO", nf0.format(r.locais_ativos || 0)]); linhas.push(["Eleitores", nf0.format(r.eleitores || 0)]); }
+      if (r.bloqueados) linhas.push(["Fora do mapa", textoBloq(r.bloqueados, r.eleitores_bloqueados || 0)]);
+      const dela = origens.filter((o) => o.properties.bpm === id);
+      const cartorios = dela.filter((o) => o.properties.contexto), saidas = dela.filter((o) => !o.properties.contexto);
+      if (cartorios.length) linhas.push([cartorios.length === 1 ? "Cartório eleitoral" : "Cartórios eleitorais", itens(cartorios.map((o) => {
+        const q = o.properties;
+        return "<b>" + esc(q.municipio) + "</b>" + (q.zona_eleitoral ? ", " + esc(q.zona_eleitoral) : "") + (q.municipios_atendidos ? ": atende " + esc(q.municipios_atendidos) : "");
+      }))]);
+      if (saidas.length) linhas.push([saidas.length === 1 ? "Ponto de saída das rotas" : "Pontos de saída das rotas", itens(saidas.map((o) => {
+        const q = o.properties, u = unidades[q.unidade];
+        return "<b>" + esc(q.rotulo || q.municipio) + "</b>" + (u ? ", " + esc(u.nome) : "");
+      }))]);
+      linhas.push(["Rotas de escolta", textoRotas(rotas.filter((f) => f.properties.bpm === id))]);
+    }
+    const dl = '<dl class="campos empilhados">' + linhas.map(([r, v]) => "<dt>" + esc(r) + "</dt><dd>" + v + "</dd>").join("") + "</dl>";
+    if (!comoCartao) return dl;
+    return '<div class="cartao-tipo">' + (id === "todas" ? "Região" : "Unidade (UEOp)") + '</div><h3 class="cartao-titulo">' + esc(nome) + "</h3>" +
+      '<div class="cartao-unidade"><img alt="" src="' + esc(asset(escudo)) + '"><span>' + esc(sub) + "</span></div>" + dl +
+      (id === "todas" ? "" : '<div class="rotas-links"><button class="btn" data-foco="todas">Ver toda a ' + esc(regiao ? regiao.nome : "região") + "</button></div>");
+  }
+
+  /* clique no cartão da gaveta: só aquela UEOp no mapa, com zoom na área dela; "todas" (3ª RPM) mostra a região inteira */
+  function focarUeop(id) {
+    const todas = !id || id === "todas";
+    estado.foco = todas ? null : id;
+    detalheUeop = todas ? "todas" : id;
+    // a UEOp escolhida aparece mesmo com os pontos dela desligados nas Camadas; a 3ª RPM liga todas
+    if (todas) estado.ocultas.clear(); else estado.ocultas.delete(id);
+    estado.modo = "geral"; estado.cidades.clear(); estado.unidades.clear();
+    if (celular()) {
+      // no celular a gaveta cobre o mapa: fecha e mostra as informações no cartão de baixo
+      abrirGaveta(false);
+      estado.rotaSel = null; estado.destinoSel = null;
+      abrirCartao(infoUeopHTML(detalheUeop, true));
+    } else if (!$("#cartao").hidden) fecharCartao();
+    else { estado.rotaSel = null; estado.destinoSel = null; }
+    aplicarFiltros(false);
+    sincronizarChavesUeop();
+    sincronizarGaveta();
+    if (todas) enquadrar(areasUeop ? areasUeop.features : [...destinos, ...locaisCtx, ...origens]);
+    else enquadrarVisiveis();
+  }
+  function limparFoco() {
+    if (!estado.foco && !detalheUeop) return;
+    estado.foco = null; detalheUeop = null;
+    sincronizarGaveta();
+  }
+  function sincronizarGaveta() {
+    const sel = estado.foco || "todas", ids = ueopsComLocais().map((r) => r.id);
+    $$("#faixa-cards .ueop-item").forEach((it) => {
+      const id = it.dataset.item, b = it.querySelector(".ueop-card"), d = it.querySelector(".ueop-detalhe");
+      const aberto = id === detalheUeop;
+      b.setAttribute("aria-pressed", String(id === sel));
+      b.setAttribute("aria-expanded", String(aberto));
+      if (aberto && d.hidden) d.innerHTML = infoUeopHTML(id, false);
+      d.hidden = !aberto;
+      // pontos desligados no painel de Camadas: cartão mais claro
+      const desligada = id === "todas" ? ids.every((u) => estado.ocultas.has(u)) : estado.ocultas.has(id);
+      b.classList.toggle("desligada", desligada);
+    });
+    // cartão aberto à vista dentro da lista
+    const fx = $("#faixa-cards"), it = detalheUeop && fx && fx.querySelector('.ueop-item[data-item="' + detalheUeop + '"]');
+    if (it && fx.clientHeight) {
+      const topo = it.offsetTop, fim = topo + it.offsetHeight;
+      if (fim > fx.scrollTop + fx.clientHeight) fx.scrollTop = fim - fx.clientHeight;
+      if (topo < fx.scrollTop) fx.scrollTop = topo;
+    }
   }
   function abrirGaveta(abrir) {
     const gav = $("#gaveta-ueop");
@@ -2296,6 +2468,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
     $("#gaveta-aba").setAttribute("aria-expanded", String(abrir));
     $("#gaveta-aba").title = abrir ? "Esconder os cartões" : "Mostrar locais de votação e eleitores por UEOp";
     $("#gaveta-corpo").inert = !abrir;
+    if (abrir && !antes) requestAnimationFrame(sincronizarGaveta);
     return antes !== abrir;
   }
   function sincronizarChavesUeop() {
@@ -2304,7 +2477,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
       if (inp.dataset.ueop === "todas") { inp.checked = !algumaOculta; inp.indeterminate = algumaOculta && !todasOcultas; }
       else inp.checked = !estado.ocultas.has(inp.dataset.ueop);
     });
-    $$("#faixa-cards .ueop-card").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.ueop === "todas" ? !todasOcultas : !estado.ocultas.has(b.dataset.ueop))));
+    sincronizarGaveta();
   }
 
   function sincronizarSeletores() {
@@ -2377,7 +2550,7 @@ window.__DADOS_EMBUTIDOS = {"cenarios":{"atual":{"type":"FeatureCollection","met
   }
 
   window.mapaEscolta = { estado, get mapa() { return mapa; }, get rotasVisiveis() { return visRotas.length; }, get destinosVisiveis() { return visDestinos.length; },
-    selecionarRota, definirCidades, definirUnidades, definirGeral, trocarBase, alternarUeop };
+    selecionarRota, definirCidades, definirUnidades, definirGeral, trocarBase, alternarUeop, focarUeop, abrirGaveta };
   document.addEventListener("DOMContentLoaded", iniciar);
 })();
 
