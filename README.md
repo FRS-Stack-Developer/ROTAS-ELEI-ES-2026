@@ -17,6 +17,7 @@ O que o mapa mostra:
   - **Verde**: rota de escolta da planilha de 2026, sem problema.
   - **Vermelho**: rota que não existia nos registros (local sem rota na planilha de 2026), criada no mapa da origem da cidade até o local.
   - **Amarelo**: problema de georreferenciamento: o traçado pelas vias termina a 100 m ou mais do local (via não mapeada ou coordenada a conferir), coordenada com pendência em aberto na aba PENDENCIAS ou rota não calculada.
+  - **Lilás**: trajeto presumido da escolta feita pela Aeronáutica (PAMA) nos 26 locais ATIVO de Lagoa Santa fora das rotas da PM. Como o agrupamento das rotas da Aeronáutica não foi informado, cada local tem um trajeto próprio, do cartório eleitoral da 157ª Zona até ele, pelas vias (OSRM). Esses trajetos não são rotas da PM: ficam fora da lista de rotas, dos indicadores e de todas as contagens. Os pontos desses locais também ficam lilás. O clique no trajeto abre o cartão com a distância, o tempo estimado e a explicação; o cartão do local tem o botão "Ver o trajeto". Liga e desliga no painel de Camadas.
   - O local com problema aparece com o ponto na mesma cor, e a descrição fica no cartão e no painel de Indicadores.
 - Avisos que não mudam a cor: menos urnas entregues do que seções do TSE (possível entrega não lançada no sistema) e outras pendências em aberto.
 - Quando a escola fica fora de uma via mapeada, o trecho final até ela aparece tracejado, para que todo local tenha a rota chegando nele.
