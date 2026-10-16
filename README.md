@@ -47,6 +47,7 @@ mapa-escolta-urnas-3rpm/
   assets/favicon.png
   scripts/gerar_dados.py   lê a planilha, calcula as rotas e gera os arquivos de data/
   scripts/montar_arquivo_unico.py  junta tudo no arquivo único
+  scripts/embaralhar.cjs   gera a versão embaralhada do arquivo único, para publicar
   scripts/cache_rotas.json traçados já calculados (evita recalcular)
   README.md
   .nojekyll
@@ -55,15 +56,19 @@ mapa-escolta-urnas-3rpm/
 
 ## Como publicar no GitHub Pages
 
+O site publicado usa só os dois arquivos da pasta PUBLICAR NO GITHUB: o `index.html`, que é o arquivo único na versão embaralhada, e este `README.md`. As pastas `css`, `js`, `data` e `scripts` e o `mapa-escolta-urnas-3rpm.html` ficam só no computador, porque têm o código e os dados legíveis.
+
 1. Crie uma conta em https://github.com, se ainda não tiver.
 2. Clique em **New repository**, dê um nome sem acento e sem espaço (por exemplo `mapa-escolta-urnas-3rpm`) e clique em **Create repository**.
 3. Na página do repositório, clique em **uploading an existing file** (ou **Add file > Upload files**).
-4. Arraste **todo o conteúdo** desta pasta (os arquivos e as pastas `css`, `js`, `data`, `assets` e `scripts`), não a pasta em si. O arquivo `.nojekyll` também deve ir. Se ele não aparecer no Windows, crie no GitHub um arquivo vazio com esse nome em **Add file > Create new file**.
+4. Arraste o `index.html` e o `README.md` da pasta PUBLICAR NO GITHUB. Se o repositório tiver as pastas `css`, `js`, `data`, `assets` ou `scripts` de envios antigos, apague-as no GitHub.
 5. Clique em **Commit changes**.
 6. Vá em **Settings > Pages**. Em **Build and deployment**, escolha **Deploy from a branch**, branch **main**, pasta **/(root)**, e clique em **Save**.
 7. Aguarde 1 ou 2 minutos. O endereço aparece no topo da página de Pages, no formato `https://SEU-USUARIO.github.io/mapa-escolta-urnas-3rpm/`.
 
 Todos os caminhos do site são relativos, por isso ele funciona dentro da subpasta do repositório.
+
+**Versão embaralhada:** o `index.html` publicado sai do `mapa-escolta-urnas-3rpm.html` com `node scripts/embaralhar.cjs mapa-escolta-urnas-3rpm.html index.html` (precisa do Node.js e de `npm install javascript-obfuscator@4 esbuild fflate`). O mapa funciona igual, com o código ofuscado, os dados compactados e o arquivo com menos da metade do tamanho. Isso dificulta a leitura e a cópia, mas não é criptografia: quem souber programar ainda consegue tirar os dados pelo navegador. As versões antigas do `index.html` continuam no histórico de commits do repositório.
 
 **Atenção:** em contas gratuitas, um site do GitHub Pages é público, mesmo que o repositório seja privado. Antes de publicar, confirme se as rotas de escolta podem ficar acessíveis a qualquer pessoa com o link.
 
@@ -129,6 +134,7 @@ Para testar a versão site (`index.html`), abrir direto não funciona, porque o 
 ## Créditos e licenças
 
 - Mapa: Leaflet 1.9.4 (licença BSD de 2 cláusulas, texto em `assets/lib/leaflet-1.9.4/LICENSE`).
+- Versão embaralhada: fflate (licença MIT, Arjun Barrett), embutido para abrir os dados compactados.
 - Mapas base: OpenStreetMap (ruas, no site publicado), Esri World Street Map (ruas, no arquivo aberto da pasta), OpenTopoMap (relevo, com Esri World Topo Map como reserva automática se o OpenTopoMap não responder), Esri World Light Gray e World Dark Gray (claro e escuro) e Esri World Imagery, World Transportation e World Boundaries and Places (satélite com nomes).
 - Sombreado do relevo: Esri World Hillshade.
 - Traçado das rotas: OSRM, com dados OpenStreetMap.
