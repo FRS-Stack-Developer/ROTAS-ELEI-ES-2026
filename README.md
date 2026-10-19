@@ -27,7 +27,7 @@ O que o mapa mostra:
 - Lista de rotas com a opção de mostrar só as rotas com problema.
 - Filtros por visão geral da 3ª RPM (a região inteira na tela), por unidade (52º BPM, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind) e por cidade, com enquadramento automático.
 - Lista de rotas com busca pelo nome do destino, cartões de detalhe e painel de indicadores.
-- Efetivo no pleito, protegido por senha: balões na parte de baixo do mapa, por unidade e com o total da 3ª RPM, e a lista dos militares de cada local de votação no cartão do local. Sem a senha, nada do efetivo aparece (veja "Efetivo no pleito" abaixo).
+- Efetivo no pleito, protegido por senha: uma aba escondida na borda de baixo do mapa ("Efetivo pleito 2º turno") abre com a senha os balões por unidade, com o total da 3ª RPM, e a lista dos militares de cada local de votação no cartão do local. Sem a senha, nada do efetivo aparece (veja "Efetivo no pleito" abaixo).
 - Mapa real de fundo com a mesma tecnologia do painel do PPAG (Leaflet com OpenStreetMap), trocado pelo seletor no canto superior direito do mapa: Ruas, Satélite (com nomes), Relevo (curvas de nível e sombreado), Claro e Escuro, mais a opção de sombreado do relevo por cima de qualquer mapa.
 
 ## Estrutura da pasta
@@ -120,7 +120,7 @@ Gere o segundo cenário com `--cenario otimizado`, o que cria `data/cenario-otim
 
 ## Efetivo no pleito (protegido por senha)
 
-Os balões na parte de baixo do mapa mostram, por unidade e no total da 3ª RPM, quantos militares estão nos locais de votação e em quantos locais. A linha "de serviço no dia" fica como "aguardando escala" até chegarem as escalas do dia 25/10. Clicar num balão filtra o mapa pela unidade. No cartão de cada local aparecem os militares lançados nele, por turno, com nome, Nº PM, início e fim do empenho e a origem (orgânico ou hipotecado).
+Na borda de baixo do mapa fica a aba "Efetivo pleito 2º turno", discreta como a aba Eleitores da borda direita. Ao clicar nela, sobe o campo da senha. Com a senha certa, os balões abrem ali embaixo e ficam na tela: por unidade e no total da 3ª RPM, quantos militares estão nos locais de votação e em quantos locais. A mesma aba recolhe e mostra os balões, e o botão "Fechar efetivo" volta a pedir a senha. A linha "de serviço no dia" fica como "aguardando escala" até chegarem as escalas do dia 25/10. Clicar num balão filtra o mapa pela unidade. Com o efetivo aberto, o cartão de cada local mostra os militares lançados nele, por turno, com nome, Nº PM, início e fim do empenho e a origem (orgânico ou hipotecado); com o efetivo fechado, o cartão não mostra nada do efetivo.
 
 Fonte: planilha "EFETIVO ELEIÇÕES 2026 - 2° TURNO", no Google Drive. Regras usadas na leitura:
 
