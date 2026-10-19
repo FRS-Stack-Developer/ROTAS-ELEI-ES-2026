@@ -125,7 +125,9 @@ Na borda de baixo do mapa fica a aba "Efetivo pleito 2º turno", discreta como a
 Fonte: planilha "EFETIVO ELEIÇÕES 2026 - 2° TURNO", no Google Drive. Regras usadas na leitura:
 
 - Nº PM repetido na planilha, em qualquer aba, fica fora do mapa em todas as linhas dele, até o remetente corrigir. Os repetidos ficam listados na planilha de conferência.
-- Só entram as linhas ligadas a um local de votação. A escolta de rota com ponto base fixo numa escola (36º BPM) liga à escola. Viatura, policiamento a pé, fiscalização, sede, comando e cessão para outra unidade não entram.
+- Só entram as linhas ligadas a um local de votação. A escolta de rota com ponto base fixo numa escola (36º BPM) liga à escola.
+- Viatura (VP) e base comunitária (BSC) que citam "PERCURSO x ROTA y" atendem os locais dessas rotas do mapa e aparecem à parte, como "viatura ou BSC", no balão e no cartão de cada local atendido. Na 1ª Cia PM Ind, a numeração das rotas da planilha é a mesma do sistema: a BSC 1 (rotas 28 e 29) lista exatamente os 5 locais dessas rotas, e a BSC 2 (rota 19), os 2 locais da rota 19. VP só com cartão programa (Anexo C da ordem de serviço) fica de fora, porque os locais dele não estão na planilha.
+- Policiamento a pé, fiscalização, sede, comando, RP, reserva e cessão para outra unidade não entram.
 - A ligação é automática quando o nome do local bate com o do TSE nos municípios da unidade. Os demais casos foram conferidos um a um e ficam na tabela `MANUAL` do `scripts/gerar_efetivo.py`.
 - Linhas de exemplo da planilha (nome FULANO) são ignoradas.
 
