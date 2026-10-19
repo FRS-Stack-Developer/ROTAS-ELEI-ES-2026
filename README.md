@@ -27,6 +27,7 @@ O que o mapa mostra:
 - Lista de rotas com a opção de mostrar só as rotas com problema.
 - Filtros por visão geral da 3ª RPM (a região inteira na tela), por unidade (52º BPM, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind) e por cidade, com enquadramento automático.
 - Lista de rotas com busca pelo nome do destino, cartões de detalhe e painel de indicadores.
+- Efetivo no pleito, protegido por senha: balões na parte de baixo do mapa, por unidade e com o total da 3ª RPM, e a lista dos militares de cada local de votação no cartão do local. Sem a senha, nada do efetivo aparece (veja "Efetivo no pleito" abaixo).
 - Mapa real de fundo com a mesma tecnologia do painel do PPAG (Leaflet com OpenStreetMap), trocado pelo seletor no canto superior direito do mapa: Ruas, Satélite (com nomes), Relevo (curvas de nível e sombreado), Claro e Escuro, mais a opção de sombreado do relevo por cima de qualquer mapa.
 
 ## Estrutura da pasta
@@ -40,11 +41,13 @@ mapa-escolta-urnas-3rpm/
   js/config.js             cores, cidades, unidades, mapas base e campos dos cartões
   data/cenario-atual.geojson   origens, destinos e rotas (gerado pelo script)
   data/unidades.json       unidades e escudos (gerado pelo script)
+  data/efetivo.cripto.json efetivo nos locais de votação, criptografado (gerado pelo scripts/gerar_efetivo.py)
   assets/escudos/          escudo da 3ª RPM e do 52º BPM
   assets/fontes/           fonte Rawline (woff2)
   assets/lib/leaflet-1.9.4/  biblioteca Leaflet, usada no arquivo único
   assets/favicon.png
   scripts/gerar_dados.py   lê a planilha, calcula as rotas e gera os arquivos de data/
+  scripts/gerar_efetivo.py liga a planilha de efetivo aos locais do mapa e criptografa os dados
   scripts/montar_arquivo_unico.py  junta tudo no arquivo único
   scripts/embaralhar.cjs   gera a versão embaralhada do arquivo único, para publicar
   scripts/cache_rotas.json traçados já calculados (evita recalcular)
@@ -109,11 +112,37 @@ Como funciona o cálculo das rotas:
 - Pendência em aberto na aba `PENDENCIAS` (coluna `RESOLVIDO` diferente de SIM) com tipo de coordenada deixa a rota amarela; os outros tipos entram como aviso.
 - As cores ficam no `js/config.js` (`cores`).
 - A modalidade de escolta vem da coluna `MODALIDADE` da aba `ROTAS_2026`, com os valores `VIATURA PM` ou `EMBARCADO TRE`. Em branco, a rota aparece como "modalidade não informada" no cartão.
-- Os campos sensíveis (equipe, viatura, placa, horários, nomes de militares, telefones) nunca são exportados para os arquivos do site. No `js/config.js`, a opção `ocultarCamposSensiveis` também os esconde dos cartões.
+- Os campos sensíveis das rotas (equipe, viatura, placa, horários, nomes de militares, telefones) nunca são exportados para os arquivos do site. No `js/config.js`, a opção `ocultarCamposSensiveis` também os esconde dos cartões. O efetivo nos locais de votação é a única exceção e entra só criptografado (veja "Efetivo no pleito").
 
 ### Cenário otimizado (etapa futura)
 
 Gere o segundo cenário com `--cenario otimizado`, o que cria `data/cenario-otimizado.geojson` no mesmo formato. Depois acrescente o cenário na lista `cenarios` do `js/config.js`.
+
+## Efetivo no pleito (protegido por senha)
+
+Os balões na parte de baixo do mapa mostram, por unidade e no total da 3ª RPM, quantos militares estão nos locais de votação e em quantos locais. A linha "de serviço no dia" fica como "aguardando escala" até chegarem as escalas do dia 25/10. Clicar num balão filtra o mapa pela unidade. No cartão de cada local aparecem os militares lançados nele, por turno, com nome, Nº PM, início e fim do empenho e a origem (orgânico ou hipotecado).
+
+Fonte: planilha "EFETIVO ELEIÇÕES 2026 - 2° TURNO", no Google Drive. Regras usadas na leitura:
+
+- Nº PM repetido na planilha, em qualquer aba, fica fora do mapa em todas as linhas dele, até o remetente corrigir. Os repetidos ficam listados na planilha de conferência.
+- Só entram as linhas ligadas a um local de votação. A escolta de rota com ponto base fixo numa escola (36º BPM) liga à escola. Viatura, policiamento a pé, fiscalização, sede, comando e cessão para outra unidade não entram.
+- A ligação é automática quando o nome do local bate com o do TSE nos municípios da unidade. Os demais casos foram conferidos um a um e ficam na tabela `MANUAL` do `scripts/gerar_efetivo.py`.
+- Linhas de exemplo da planilha (nome FULANO) são ignoradas.
+
+Proteção: os dados do efetivo ficam no arquivo criptografados com AES-256-GCM, com a chave tirada da senha por PBKDF2-SHA256 (600 mil iterações). A senha não fica gravada em nenhum arquivo. Sem ela, nenhum nome, número ou horário fica legível, nem no código. Com a senha, os dados abertos ficam só na memória da aba e somem ao fechar a página ou ao clicar em Fechar. A proteção vale o que vale a senha: uma senha curta ou comum pode ser descoberta por tentativa, por isso use uma senha longa e combine com quem vai receber o link.
+
+Para atualizar o efetivo (requer `pip install cryptography openpyxl`):
+
+1. No Google Drive, baixe a planilha em .xlsx (Arquivo > Fazer download > Microsoft Excel).
+2. No terminal do Windows, na pasta do projeto:
+   ```
+   set EFETIVO_SENHA=senha-combinada
+   python scripts/gerar_efetivo.py --efetivo "C:\Users\SEU_USUARIO\Downloads\EFETIVO ELEIÇÕES 2026 - 2° TURNO.xlsx" --tse "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\Secoes_eleitorais_2026_18municipios.xlsx" --base "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --lido-em "19/10/2026 12:26" --conferencia "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\EFETIVO_CONFERENCIA_2TURNO.xlsx"
+   ```
+   O `--lido-em` é a data e a hora da versão baixada; aparece nos balões e nos cartões.
+3. Rode o `scripts/montar_arquivo_unico.py` e o `scripts/embaralhar.cjs`, como nos outros casos.
+
+A planilha de conferência (`EFETIVO_CONFERENCIA_2TURNO.xlsx`) fica só no computador, porque tem nomes e números. Ela traz o resumo por aba, os repetidos para devolver aos remetentes, as linhas a conferir e a ligação de cada local de empenho com o local do mapa.
 
 ## Como abrir no computador
 
