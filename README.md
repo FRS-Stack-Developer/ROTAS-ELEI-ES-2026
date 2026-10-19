@@ -25,7 +25,7 @@ O que o mapa mostra:
 - Animação do sentido do deslocamento (origem para destino).
 - Rota selecionada em azul, com o sentido animado e as paradas numeradas na ordem. As demais rotas ficam transparentes e param de animar.
 - Lista de rotas com a opção de mostrar só as rotas com problema.
-- Filtros por visão geral da 3ª RPM (a região inteira na tela), por unidade (52º BPM e suas Cias, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind) e por cidade, com enquadramento automático.
+- Filtros por visão geral da 3ª RPM (a região inteira na tela), por unidade (52º BPM, 1ª Cia PM Ind, 35º BPM, 36º BPM, 61º BPM e 8ª Cia PM Ind) e por cidade, com enquadramento automático.
 - Lista de rotas com busca pelo nome do destino, cartões de detalhe e painel de indicadores.
 - Mapa real de fundo com a mesma tecnologia do painel do PPAG (Leaflet com OpenStreetMap), trocado pelo seletor no canto superior direito do mapa: Ruas, Satélite (com nomes), Relevo (curvas de nível e sombreado), Claro e Escuro, mais a opção de sombreado do relevo por cima de qualquer mapa.
 
