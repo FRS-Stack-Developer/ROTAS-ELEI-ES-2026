@@ -84,18 +84,18 @@ A fonte dos dados é a planilha `BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx`, com as 
    ```
 2. Na pasta do projeto, rode:
    ```
-   python scripts/gerar_dados.py --planilha "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --tse "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\Secoes_eleitorais_2026_18municipios.xlsx"
+   python scripts/gerar_dados.py --planilha "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\01 DADOS DO MAPA\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --tse "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\01 DADOS DO MAPA\Secoes_eleitorais_2026_18municipios.xlsx"
    ```
    O `--tse` é opcional: com ele, o script compara as urnas entregues em cada local com as seções que funcionam no TSE e anota um aviso quando faltam urnas.
 3. O script mostra quantas rotas e destinos gerou por cidade e lista as pendências (local sem coordenada, rota não calculada).
 4. Se o arquivo de limites das UEOp mudar (UEOPS.geojson exportado do Google Earth), rode:
    ```
-   python scripts/gerar_ueops.py --arquivo "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\UEOPS.geojson"
+   python scripts/gerar_ueops.py --arquivo "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\01 DADOS DO MAPA\UEOPS.geojson"
    ```
    O script grava `data/ueops.geojson` com o desenho simplificado (precisão de cerca de 10 m) e só o nome de cada área.
-   A divisa de Minas Gerais (`data/minas-gerais.geojson`) é gerada uma vez a partir da malha municipal do IBGE (arquivo `MUNICIPIOS_MINAS_GERAIS.geojson`, do projeto geodata-br) e não precisa ser refeita. Se quiser refazer (requer `pip install shapely`):
+   A divisa de Minas Gerais (`data/minas-gerais.geojson`) é gerada uma vez a partir da malha municipal do IBGE (arquivo `MUNICIPIOS_MINAS_GERAIS.geojson`, do projeto geodata-br, que não fica guardado: baixe de novo se precisar) e não precisa ser refeita. Se quiser refazer (requer `pip install shapely`):
    ```
-   python scripts/gerar_limite_estado.py --arquivo "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\MUNICIPIOS_MINAS_GERAIS.geojson"
+   python scripts/gerar_limite_estado.py --arquivo "CAMINHO\MUNICIPIOS_MINAS_GERAIS.geojson"
    ```
 5. Para atualizar também o arquivo único (o de duplo clique), rode:
    ```
@@ -120,7 +120,7 @@ Gere o segundo cenário com `--cenario otimizado`, o que cria `data/cenario-otim
 
 ## Efetivo no pleito (protegido por senha)
 
-Na borda de baixo do mapa fica a aba "Efetivo pleito 2º turno", discreta como a aba Eleitores da borda direita. Ao clicar nela, sobe o campo da senha. Com a senha certa, os balões abrem ali embaixo e ficam na tela: por unidade e no total da 3ª RPM, quantos militares estão nos locais de votação e em quantos locais. A mesma aba recolhe e mostra os balões, e o botão "Fechar efetivo" volta a pedir a senha. Cada balão mostra os militares fixos nos locais e, à parte, os que estão em patrulha (VP, RP ou BSC); cada militar conta uma vez. Com o efetivo aberto, o campo de pesquisa acha militares por nome, por Nº PM (com ou sem o zero na frente) e pelo nome do local de votação ou do município (por exemplo, "escola", "leonina", "silva sabará", "8.0.2" ou "BSC 1"); clicar num resultado leva o mapa até o local e abre o cartão dele. A linha "de serviço no dia" fica como "aguardando escala" até chegarem as escalas do dia 25/10. Clicar num balão filtra o mapa pela unidade. Com o efetivo aberto, o cartão de cada local mostra os militares lançados nele, por turno, com nome, Nº PM, início e fim do empenho e a origem (orgânico ou hipotecado); com o efetivo fechado, o cartão não mostra nada do efetivo.
+Na borda de baixo do mapa fica a aba "Efetivo pleito 2º turno", discreta como a aba Eleitores da borda direita. Ao clicar nela, sobe o campo da senha. Com a senha certa, os balões abrem ali embaixo e ficam na tela: por unidade e no total da 3ª RPM, quantos militares estão nos locais de votação e em quantos locais. A mesma aba recolhe e mostra os balões, e o botão "Fechar efetivo" volta a pedir a senha. Cada balão mostra os militares fixos nos locais e, à parte, os que estão em patrulha (VP, RP ou BSC); cada militar conta uma vez. Com o efetivo aberto, o campo de pesquisa acha militares por nome, por Nº PM (com ou sem o zero na frente) e pelo nome do local de votação ou do município (por exemplo, "escola", "leonina", "silva sabará", "8.0.2" ou "BSC 1"); clicar num resultado leva o mapa até o local e abre o cartão dele. A pesquisa acha todo militar lançado na planilha: quem não está num local de votação do mapa aparece com a função ou o local escrito na planilha (outra função, patrulha com locais no cartão programa, local não identificado no mapa ou fora por conflito de horário). Os balões mostram também quantos estão só em outras funções e quantos citam um local que não foi identificado no mapa. A linha "de serviço no dia" fica como "aguardando escala" até chegarem as escalas do dia 25/10. Clicar num balão filtra o mapa pela unidade. Com o efetivo aberto, o cartão de cada local mostra os militares lançados nele, por turno, com nome, Nº PM, início e fim do empenho e a origem (orgânico ou hipotecado); com o efetivo fechado, o cartão não mostra nada do efetivo.
 
 Fonte: planilha "EFETIVO ELEIÇÕES 2026 - 2° TURNO", no Google Drive. Cada linha da planilha é um empenho. Regras usadas na leitura:
 
@@ -128,10 +128,13 @@ Fonte: planilha "EFETIVO ELEIÇÕES 2026 - 2° TURNO", no Google Drive. Cada lin
 - Patrulha que atende vários locais (radiopatrulhamento, VP, viatura ou BSC): com a lista de locais entre parênteses, por exemplo "RÁDIOPATRULHAMENTO 8.0.2 (E. E. TIRADENTES, ...)", cada local da lista é casado com o TSE; se algum não casar, a linha inteira fica fora e vai para a conferência, sem ligar nada pela metade. Com "PERCURSO x ROTA y" (1ª Cia PM Ind), atende os locais dessas rotas do mapa, porque a numeração é a mesma do sistema (a BSC 1, rotas 28 e 29, lista exatamente os 5 locais dessas rotas). VP só com cartão programa (Anexo C da ordem de serviço) fica fora, porque os locais dele não estão na planilha.
 - O mesmo militar em mais de uma linha (dupla que cobre dois locais, dois turnos no mesmo local, cessão de outra unidade) aparece em todos os locais dele e conta uma vez só no efetivo, na unidade da primeira linha dele com local (fixo antes de patrulha). A exceção é o mesmo militar no mesmo horário em municípios diferentes, o que é impossível: ele fica fora do mapa até o remetente corrigir.
 - Fiscalização, supervisão, sede, REDS, logística, policiamento a pé, comando, reserva e cessão para outra unidade não entram.
+- Texto no formato "ZE 246 | ROTA 01 | ESCOLA ..." (35º BPM): a zona e a rota saem do nome, a zona limita a busca no TSE e a rota aparece no cartão.
 - A ligação é automática quando o nome do local bate com o do TSE nos municípios da unidade. Os demais casos foram conferidos um a um e ficam nas tabelas `MANUAL` e `ITENS_MANUAL` do `scripts/gerar_efetivo.py`.
 - Linhas de exemplo da planilha (nome FULANO) são ignoradas.
 
 Proteção: os dados do efetivo ficam no arquivo criptografados com AES-256-GCM, com a chave tirada da senha por PBKDF2-SHA256 (600 mil iterações). A senha não fica gravada em nenhum arquivo. Sem ela, nenhum nome, número ou horário fica legível, nem no código. Com a senha, os dados abertos ficam só na memória da aba e somem ao fechar a página ou ao clicar em Fechar. A proteção vale o que vale a senha: uma senha curta ou comum pode ser descoberta por tentativa, por isso use uma senha longa e combine com quem vai receber o link.
+
+Os dados ficam no Google Drive, na pasta PROJETO ELEIÇÕES - ROTAS (01 DADOS DO MAPA, 02 ESCALAS 25-10, 03 PROJETO DO MAPA, 04 PUBLICAR NO GITHUB e 05 CONFERENCIA DO EFETIVO, esta restrita). O roteiro `ferramentas/atualizar.sh`, que fica no zip do projeto, refaz o efetivo, monta as duas versões e roda todos os testes de uma vez (ver `ferramentas/LEIA-ME.md`).
 
 Para atualizar o efetivo (requer `pip install cryptography openpyxl`):
 
@@ -139,7 +142,7 @@ Para atualizar o efetivo (requer `pip install cryptography openpyxl`):
 2. No terminal do Windows, na pasta do projeto:
    ```
    set EFETIVO_SENHA=senha-combinada
-   python scripts/gerar_efetivo.py --efetivo "C:\Users\SEU_USUARIO\Downloads\EFETIVO ELEIÇÕES 2026 - 2° TURNO.xlsx" --tse "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\Secoes_eleitorais_2026_18municipios.xlsx" --base "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --lido-em "19/10/2026 12:26" --conferencia "C:\Users\SEU_USUARIO\Desktop\ROTAS OURO PRETO\EFETIVO_CONFERENCIA_2TURNO.xlsx"
+   python scripts/gerar_efetivo.py --efetivo "C:\Users\SEU_USUARIO\Downloads\EFETIVO ELEIÇÕES 2026 - 2° TURNO.xlsx" --tse "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\01 DADOS DO MAPA\Secoes_eleitorais_2026_18municipios.xlsx" --base "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\01 DADOS DO MAPA\BASE_OTIMIZACAO_ROTAS_URNAS_2026.xlsx" --lido-em "19/10/2026 12:26" --conferencia "G:\Meu Drive\PROJETO ELEIÇÕES - ROTAS\05 CONFERENCIA DO EFETIVO (restrito)\EFETIVO_CONFERENCIA_2TURNO.xlsx"
    ```
    O `--lido-em` é a data e a hora da versão baixada; aparece nos balões e nos cartões.
 3. Rode o `scripts/montar_arquivo_unico.py` e o `scripts/embaralhar.cjs`, como nos outros casos.
